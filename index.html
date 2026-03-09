@@ -271,6 +271,92 @@
             50% { opacity: 1; transform: scale(1.03); text-shadow: 0 0 18px rgba(230,126,34,0.7); }
         }
 
+        /* ===== LOGIN SCREEN - FIXED CENTERING ===== */
+        #loginScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), #000);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 30px;
+            padding: 2rem;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            border: 2px solid var(--accent);
+            animation: slideUp 0.5s ease;
+            margin: auto;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .welcome-text {
+            text-align: center;
+            color: var(--dark);
+            margin: 1rem 0 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            font-size: 1rem;
+            background: #f8f9fa;
+        }
+
+        .login-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(230,126,34,0.1);
+        }
+
+        /* Remove browser autofill background */
+        .login-input:-webkit-autofill,
+        .login-input:-webkit-autofill:hover,
+        .login-input:-webkit-autofill:focus,
+        .login-input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 30px #f8f9fa inset !important;
+            -webkit-text-fill-color: #000 !important;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+            transition: all 0.3s;
+        }
+
+        .btn-primary { 
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
+            color: white; 
+        }
+
         /* ===== CONNECTION INDICATOR - UPDATED ===== */
         .connection-bar {
             display: flex;
@@ -702,12 +788,12 @@
             opacity: 0.7;
         }
 
-        /* Active Trip Card */
+        /* Active Trip Card - ENHANCED BUTTONS */
         .trip-card {
             background: linear-gradient(135deg, var(--secondary), #000);
             border-radius: 20px;
-            padding: 1.25rem;
-            margin-bottom: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
             border: 2px solid var(--accent);
         }
 
@@ -715,14 +801,14 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
         }
 
         .trip-stage {
             background: var(--accent);
-            padding: 0.25rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            padding: 0.4rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
             font-weight: bold;
         }
 
@@ -730,29 +816,72 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            padding: 0.5rem 0;
+            padding: 0.6rem 0;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        .trip-row i { width: 20px; color: var(--accent); }
+        .trip-row i { width: 24px; color: var(--accent); font-size: 1.1rem; }
 
         .trip-detail-row {
             display: flex;
             justify-content: space-between;
-            padding: 0.5rem 0;
+            padding: 0.6rem 0;
             border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.95rem;
         }
 
+        /* ENHANCED VISIBLE BUTTONS */
         .trip-actions {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 0.5rem;
-            margin-top: 1rem;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
         }
 
         .trip-actions .btn {
-            padding: 0.6rem;
-            font-size: 0.7rem;
+            padding: 1rem 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border-radius: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .trip-actions .btn-warning {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+        }
+
+        .trip-actions .btn-success {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+        }
+
+        .trip-actions .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .trip-actions .btn-danger {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .trip-actions .btn:disabled {
+            opacity: 0.4;
+            filter: grayscale(80%);
+        }
+
+        .btn-danger.cancel-btn {
+            margin-top: 0.75rem;
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
         /* Job Card */
@@ -1017,7 +1146,7 @@
             border-bottom: none;
         }
 
-        /* PAYMENT SECTION - Hidden by default, shows when payment button clicked */
+        /* PAYMENT SECTION */
         .payment-section {
             background: rgba(255,255,255,0.1);
             border-radius: 20px;
@@ -1388,7 +1517,7 @@
         <source src="https://www.soundjay.com/misc/sounds/notification-1.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- LOGIN SCREEN -->
+    <!-- LOGIN SCREEN - FIXED CENTERING -->
     <div id="loginScreen">
         <div class="login-container">
             <div class="movex-logo">
@@ -1424,7 +1553,7 @@
                 Invalid credentials
             </div>
 
-            <input type="text" id="driverName" class="login-input" placeholder="Driver Name" autocomplete="off">
+            <input type="text" id="driverName" class="login-input" placeholder="Driver Name" autocomplete="off" autocapitalize="none" spellcheck="false">
             <input type="password" id="password" class="login-input" placeholder="Password" autocomplete="off">
             
             <button class="btn btn-primary" onclick="login()">
@@ -1578,7 +1707,7 @@
                     </div>
                 </div>
 
-                <!-- Active Trip Card -->
+                <!-- Active Trip Card - ENHANCED VISIBLE BUTTONS -->
                 <div id="activeTripCard" class="trip-card hidden">
                     <div class="trip-header">
                         <h3>ACTIVE TRIP</h3>
@@ -1616,7 +1745,7 @@
                         <button class="btn btn-primary" onclick="startTrip()" id="startBtn" disabled>START</button>
                         <button class="btn btn-danger" onclick="completeTrip()" id="completeBtn" disabled>END</button>
                     </div>
-                    <button class="btn btn-danger" onclick="cancelTrip()" style="margin-top: 0.5rem;">CANCEL</button>
+                    <button class="btn btn-danger cancel-btn" onclick="cancelTrip()">CANCEL TRIP</button>
                 </div>
 
                 <h3 style="margin-bottom: 0.5rem;">RECENT ACTIVITY</h3>
@@ -1704,7 +1833,7 @@
                     </div>
                 </div>
 
-                <!-- Meter Buttons with PAYMENT added -->
+                <!-- Meter Buttons -->
                 <div class="meter-buttons">
                     <button class="btn btn-success" onclick="startMeter()" id="startMeterBtn">
                         <i class="fas fa-play"></i> START
@@ -2001,6 +2130,7 @@
         let reconnectAttempts = 0;
         let wakeLock = null;
         let manualFareOverride = null;
+        let audioContext = null;
         const MAX_RECONNECT_ATTEMPTS = 5;
 
         // Audio elements
@@ -2030,6 +2160,93 @@
         };
 
         // =============================================
+        // ENHANCED AUDIO FUNCTIONS FOR MOBILE
+        // =============================================
+        function initAudio() {
+            try {
+                // Initialize Web Audio API for better mobile support
+                window.AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (window.AudioContext) {
+                    audioContext = new AudioContext();
+                    
+                    // Resume audio context on user interaction
+                    const resumeAudio = function() {
+                        if (audioContext && audioContext.state === 'suspended') {
+                            audioContext.resume().then(() => {
+                                console.log('AudioContext resumed successfully');
+                            });
+                        }
+                        document.removeEventListener('touchstart', resumeAudio);
+                        document.removeEventListener('click', resumeAudio);
+                    };
+                    
+                    document.addEventListener('touchstart', resumeAudio);
+                    document.addEventListener('click', resumeAudio);
+                }
+            } catch (e) {
+                console.log('Web Audio API not supported', e);
+            }
+        }
+
+        function playBirdSound() {
+            console.log('Playing bird sound...');
+            
+            // Try to resume AudioContext if suspended
+            if (audioContext && audioContext.state === 'suspended') {
+                audioContext.resume().then(() => {
+                    playBirdSoundDirect();
+                }).catch(() => {
+                    playBirdSoundDirect();
+                });
+            } else {
+                playBirdSoundDirect();
+            }
+        }
+
+        function playBirdSoundDirect() {
+            if (birdAudio) {
+                // Reset to beginning
+                birdAudio.currentTime = 0;
+                birdAudio.volume = 1.0;
+                
+                // Try to play with promise handling
+                let playPromise = birdAudio.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        console.log('✅ Bird sound played successfully');
+                        
+                        // Vibrate for extra notification (optional)
+                        if (navigator.vibrate) {
+                            navigator.vibrate([200, 100, 200]);
+                        }
+                    }).catch(error => {
+                        console.log('❌ Audio play failed:', error);
+                        
+                        // Fallback: Just vibrate
+                        if (navigator.vibrate) {
+                            navigator.vibrate([500, 200, 500]);
+                        }
+                        
+                        // Show notification as fallback
+                        if (Notification.permission === 'granted') {
+                            new Notification('🚕 New Job Available!', {
+                                body: 'A new trip is waiting for you',
+                                icon: 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'45\' fill=\'%230a1a2a\'/%3E%3Ctext x=\'50\' y=\'70\' font-size=\'50\' text-anchor=\'middle\' fill=\'%23e67e22\'%3EMX%3C/text%3E%3C/svg%3E',
+                                vibrate: [200, 100, 200]
+                            });
+                        }
+                    });
+                }
+            } else {
+                console.log('Bird audio element not found');
+                if (navigator.vibrate) {
+                    navigator.vibrate([500, 200, 500]);
+                }
+            }
+        }
+
+        // =============================================
         // WAKE LOCK FOR BACKGROUND OPERATION
         // =============================================
         async function requestWakeLock() {
@@ -2040,6 +2257,13 @@
                     
                     wakeLock.addEventListener('release', () => {
                         document.getElementById('wakeLockIndicator').classList.add('hidden');
+                    });
+                    
+                    // Re-acquire wake lock if page becomes visible again
+                    document.addEventListener('visibilitychange', async () => {
+                        if (wakeLock !== null && document.visibilityState === 'visible') {
+                            wakeLock = await navigator.wakeLock.request('screen');
+                        }
                     });
                 }
             } catch (err) {
@@ -2146,7 +2370,10 @@
             if (message.sender !== 'driver') {
                 messageCount++;
                 document.getElementById('messageBadge').textContent = messageCount;
-                if (messageAudio) messageAudio.play();
+                if (messageAudio) {
+                    messageAudio.currentTime = 0;
+                    messageAudio.play().catch(() => {});
+                }
             }
         }
 
@@ -2164,24 +2391,46 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('MoveX Driver App starting...');
             
-            // Initialize audio
+            // Initialize audio system
+            initAudio();
+            
+            // Initialize audio elements
             birdAudio = document.getElementById('birdSound');
             notificationAudio = document.getElementById('notificationSound');
             panicAudio = document.getElementById('panicSound');
             messageAudio = document.getElementById('messageSound');
             
-            // Enable audio on mobile
-            document.addEventListener('touchstart', function() {
+            // Preload audio
+            [birdAudio, notificationAudio, panicAudio, messageAudio].forEach(audio => {
+                if (audio) {
+                    audio.load();
+                    audio.volume = 1.0;
+                }
+            });
+            
+            // Enable audio on first user interaction
+            const enableAudio = function() {
+                console.log('User interaction - enabling audio');
                 [birdAudio, notificationAudio, panicAudio, messageAudio].forEach(audio => {
                     if (audio) {
-                        audio.load();
                         audio.play().catch(() => {}).then(() => {
                             audio.pause();
                             audio.currentTime = 0;
                         });
                     }
                 });
-            }, { once: true });
+                
+                // Request notification permission
+                if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+                    Notification.requestPermission();
+                }
+                
+                document.removeEventListener('touchstart', enableAudio);
+                document.removeEventListener('click', enableAudio);
+            };
+            
+            document.addEventListener('touchstart', enableAudio, { once: true });
+            document.addEventListener('click', enableAudio, { once: true });
             
             // Check for saved session
             checkSavedSession();
@@ -2941,7 +3190,11 @@
                     // Play panic sound
                     if (panicAudio) {
                         panicAudio.loop = true;
-                        panicAudio.play();
+                        panicAudio.play().catch(() => {
+                            if (navigator.vibrate) {
+                                navigator.vibrate([1000, 500, 1000]);
+                            }
+                        });
                         setTimeout(() => {
                             panicAudio.pause();
                             panicAudio.currentTime = 0;
@@ -3022,17 +3275,6 @@
             speedAlertEnabled = !speedAlertEnabled;
             if (!speedAlertEnabled) {
                 document.getElementById('speedIndicator').style.display = 'none';
-            }
-        }
-
-        function playBirdSound() {
-            if (birdAudio) {
-                birdAudio.currentTime = 0;
-                birdAudio.play().catch(() => {
-                    if (navigator.vibrate) {
-                        navigator.vibrate([200, 100, 200]);
-                    }
-                });
             }
         }
 
