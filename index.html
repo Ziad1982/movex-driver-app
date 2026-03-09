@@ -1,0 +1,3096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    
+    <!-- MoveX Icons for Home Screen - ALL SIZES with proper PWA support -->
+    <link rel="apple-touch-icon" sizes="57x57" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='57' height='57' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230a1a2a' stroke='%23e67e22' stroke-width='2'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='%23e67e22' font-family='Arial' font-weight='bold'%3EMX%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" sizes="60x60" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230a1a2a' stroke='%23e67e22' stroke-width='2'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='%23e67e22' font-family='Arial' font-weight='bold'%3EMX%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" sizes="72x72" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230a1a2a' stroke='%23e67e22' stroke-width='2'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='%23e67e22' font-family='Arial' font-weight='bold'%3EMX%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" sizes="76x76" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='76' height='76' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230a1a2a' stroke='%23e67e22' stroke-width='2'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='%23e67e22' font-family='Arial' font-weight='bold'%3EMX%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" sizes="114x114" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='114' height='114' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230a1a2a' stroke='%23e67e22' stroke-width='2'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='%23e67e22' font-family='Arial' font-weight='bold'%3EMX%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" sizes="120x120" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230a1a2a' stroke='%23e67e22' stroke-width='2'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='%23e67e22' font-family='Arial' font-weight='bold'%3EMX%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" sizes="144x144" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='144' height='144' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230a1a2a' stroke='%23e67e22' stroke-width='2'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='%23e67e22' font-family='Arial' font-weight='bold'%3EMX%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" sizes="152x152" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='152' height='152' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230a1a2a' stroke='%23e67e22' stroke-width='2'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='%23e67e22' font-family='Arial' font-weight='bold'%3EMX%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230a1a2a' stroke='%23e67e22' stroke-width='2'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='%23e67e22' font-family='Arial' font-weight='bold'%3EMX%3C/text%3E%3C/svg%3E">
+
+    <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230a1a2a' stroke='%23e67e22' stroke-width='2'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='%23e67e22' font-family='Arial' font-weight='bold'%3EMX%3C/text%3E%3C/svg%3E">
+    <link rel="icon" type="image/png" sizes="512x512" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230a1a2a' stroke='%23e67e22' stroke-width='2'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='%23e67e22' font-family='Arial' font-weight='bold'%3EMX%3C/text%3E%3C/svg%3E">
+
+    <!-- Enhanced PWA Manifest for Install Prompt with full home screen support -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "MoveX Driver Pro",
+        "short_name": "MoveX",
+        "description": "Professional driver app for MoveX dispatch system",
+        "start_url": ".",
+        "display": "standalone",
+        "background_color": "#0a1a2a",
+        "theme_color": "#e67e22",
+        "orientation": "portrait",
+        "categories": ["transportation", "business"],
+        "prefer_related_applications": false,
+        "icons": [
+            {
+                "src": "data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'192\' height=\'192\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'45\' fill=\'%230a1a2a\' stroke=\'%23e67e22\' stroke-width=\'2\'/%3E%3Ctext x=\'50\' y=\'70\' font-size=\'50\' text-anchor=\'middle\' fill=\'%23e67e22\' font-family=\'Arial\' font-weight=\'bold\'%3EMX%3C/text%3E%3C/svg%3E",
+                "sizes": "192x192",
+                "type": "image/svg+xml",
+                "purpose": "any maskable"
+            },
+            {
+                "src": "data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'512\' height=\'512\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'45\' fill=\'%230a1a2a\' stroke=\'%23e67e22\' stroke-width=\'2\'/%3E%3Ctext x=\'50\' y=\'70\' font-size=\'50\' text-anchor=\'middle\' fill=\'%23e67e22\' font-family=\'Arial\' font-weight=\'bold\'%3EMX%3C/text%3E%3C/svg%3E",
+                "sizes": "512x512",
+                "type": "image/svg+xml",
+                "purpose": "any maskable"
+            }
+        ]
+    }'>
+
+    <!-- Meta tags for iOS home screen -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="MoveX Driver">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0a1a2a">
+    <meta name="msapplication-TileColor" content="#0a1a2a">
+    
+    <title>MoveX Driver Pro</title>
+    
+    <!-- Keep all existing CSS and JS links -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    
+    <style>
+        /* ===== RESET & VARIABLES with enhanced modern UI ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #0a1a2a;
+            --primary-light: #1a2a3a;
+            --primary-dark: #05101a;
+            --secondary: #1a2a3a;
+            --accent: #e67e22;
+            --accent-light: #f39c12;
+            --accent-gradient: linear-gradient(135deg, #e67e22, #f39c12);
+            --success: #27ae60;
+            --success-gradient: linear-gradient(135deg, #27ae60, #2ecc71);
+            --danger: #e74c3c;
+            --danger-gradient: linear-gradient(135deg, #e74c3c, #c0392b);
+            --warning: #f39c12;
+            --warning-gradient: linear-gradient(135deg, #f39c12, #e67e22);
+            --info: #3498db;
+            --info-gradient: linear-gradient(135deg, #3498db, #2980b9);
+            --light: #ecf0f1;
+            --dark: #1e2b3a;
+            --gray: #7f8c8d;
+            --gray-light: #95a5a6;
+            --blue-glow: #3b82f6;
+            --orange-flame: #f97316;
+            --red-speed: #e74c3c;
+            --purple-glow: #8b5cf6;
+            --pink-glow: #d946ef;
+            
+            /* Glass effects */
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary), #000);
+            color: white;
+            max-width: 500px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .hidden { display: none !important; }
+
+        /* ===== MOVEX PROFESSIONAL LOGO - Enhanced ===== */
+        .movex-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            position: relative;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 10px 20px rgba(230,126,34,0.2));
+        }
+
+        .move-text {
+            font-family: 'Inter', 'Segoe UI', 'Montserrat', sans-serif;
+            font-size: 3.2rem;
+            font-weight: 800;
+            background: linear-gradient(145deg, #3b82f6, #8b5cf6, #d946ef, #f97316);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            transform: scale(1.05);
+        }
+
+        .o-container {
+            position: relative;
+            display: inline-block;
+            margin: 0 -3px;
+        }
+
+        .o-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 48px;
+            height: 48px;
+            border: 3px solid transparent;
+            border-top: 3px solid #3b82f6;
+            border-right: 3px solid #8b5cf6;
+            border-bottom: 3px solid #d946ef;
+            border-left: 3px solid #f97316;
+            border-radius: 50%;
+            animation: fastSpin 1.5s linear infinite;
+            opacity: 0.9;
+            box-shadow: 0 0 20px rgba(59,130,246,0.5);
+        }
+
+        .x-letter {
+            font-family: 'Inter', 'Segoe UI', 'Montserrat', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 900;
+            background: linear-gradient(145deg, #f97316, #eab308, #22d3ee, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            margin-left: -5px;
+            transform: scaleX(1.2) scaleY(1.1);
+            display: inline-block;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            letter-spacing: -5px;
+        }
+
+        /* ===== POWERED BY ZLINK TECHNOLOGY - Enhanced ===== */
+        .powered-by-container {
+            text-align: center;
+            margin: 1rem 0 0.5rem;
+            position: relative;
+        }
+
+        .powered-by-text {
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.5);
+            display: inline-block;
+            position: relative;
+            padding: 0 12px;
+            text-transform: uppercase;
+        }
+
+        .powered-by-text::before,
+        .powered-by-text::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 25px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .powered-by-text::before { left: -20px; }
+        .powered-by-text::after { right: -20px; }
+
+        .zlink-highlight {
+            color: var(--accent) !important;
+            font-weight: 800;
+            font-size: 0.8rem;
+            text-shadow: 0 0 15px rgba(230,126,34,0.5);
+            background: rgba(230,126,34,0.15);
+            padding: 4px 12px;
+            border-radius: 30px;
+            margin-left: 6px;
+            display: inline-block;
+            animation: zlinkPulse 2s ease infinite;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes zlinkPulse {
+            0%,100% { opacity: 0.9; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); text-shadow: 0 0 20px rgba(230,126,34,0.7); }
+        }
+
+        /* ===== CONNECTION INDICATOR - Enhanced ===== */
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .connection-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .connection-dot.connected {
+            background: var(--success);
+            box-shadow: 0 0 20px var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        .connection-dot.connected::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border-radius: 50%;
+            background: var(--success);
+            opacity: 0.3;
+            animation: ripple 2s infinite;
+        }
+
+        .connection-dot.disconnected {
+            background: var(--danger);
+            box-shadow: 0 0 20px var(--danger);
+        }
+
+        .connection-text.connected { color: var(--success); font-weight: 600; }
+        .connection-text.disconnected { color: var(--danger); font-weight: 600; }
+
+        @keyframes pulse {
+            0%,100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 0.3; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        /* ===== LOGIN SCREEN - Enhanced ===== */
+        #loginScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary), #000);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 40px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            border: 2px solid var(--accent);
+            animation: slideUp 0.5s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .welcome-text {
+            text-align: center;
+            color: var(--dark);
+            margin: 1rem 0 0.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 1.2rem;
+            margin: 0.5rem 0;
+            border: 2px solid #eee;
+            border-radius: 20px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: #f8f9fa;
+        }
+
+        .login-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(230,126,34,0.1);
+            background: white;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1.2rem;
+            border: none;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+            transition: all 0.3s;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary { 
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
+            color: white; 
+            box-shadow: 0 10px 20px rgba(10,26,42,0.3);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(10,26,42,0.4); }
+
+        .btn-success { 
+            background: var(--success-gradient); 
+            color: white; 
+            box-shadow: 0 10px 20px rgba(39,174,96,0.3);
+        }
+        .btn-success:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(39,174,96,0.4); }
+
+        .btn-danger { 
+            background: var(--danger-gradient); 
+            color: white; 
+            box-shadow: 0 10px 20px rgba(231,76,60,0.3);
+        }
+        .btn-danger:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(231,76,60,0.4); }
+
+        .btn-warning { 
+            background: var(--warning-gradient); 
+            color: white; 
+            box-shadow: 0 10px 20px rgba(243,156,18,0.3);
+        }
+        .btn-warning:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(243,156,18,0.4); }
+
+        .btn-info { 
+            background: var(--info-gradient); 
+            color: white; 
+            box-shadow: 0 10px 20px rgba(52,152,219,0.3);
+        }
+        .btn-info:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(52,152,219,0.4); }
+
+        .btn-accent { 
+            background: var(--accent-gradient); 
+            color: white; 
+            box-shadow: 0 10px 20px rgba(230,126,34,0.3);
+        }
+        .btn-accent:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(230,126,34,0.4); }
+
+        .btn-payment { 
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9); 
+            color: white; 
+            box-shadow: 0 10px 20px rgba(139,92,246,0.3);
+        }
+        .btn-payment:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(139,92,246,0.4); }
+
+        .btn:active { transform: scale(0.96); }
+
+        /* ===== MAIN APP - Enhanced with glass morphism ===== */
+        #app {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary), #000);
+            padding-bottom: 70px;
+        }
+
+        /* Header - Enhanced */
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid var(--accent);
+            backdrop-filter: blur(10px);
+        }
+
+        .connection-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .driver-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            border: 1px solid var(--glass-border);
+        }
+
+        .driver-info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .driver-details {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .driver-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.3rem;
+            border: 3px solid white;
+            box-shadow: 0 8px 20px rgba(230,126,34,0.4);
+        }
+
+        .driver-text h3 { font-size: 1.1rem; font-weight: 700; }
+        .driver-text p { font-size: 0.8rem; opacity: 0.9; }
+
+        .header-icons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .icon-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .icon-btn:hover {
+            background: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            font-size: 0.7rem;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--primary);
+            font-weight: bold;
+        }
+
+        /* Navigation Tabs - Enhanced */
+        .nav-tabs {
+            display: flex;
+            justify-content: space-around;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 0.4rem;
+            margin-top: 0.75rem;
+            border: 1px solid var(--glass-border);
+        }
+
+        .nav-tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.6rem 0;
+            border-radius: 30px;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-tab i {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .nav-tab.active {
+            background: var(--accent-gradient);
+            color: white;
+            transform: scale(1.02);
+            box-shadow: 0 8px 20px rgba(230,126,34,0.4);
+            font-weight: 600;
+        }
+
+        /* Status Bar - Enhanced */
+        .status-bar {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 0.7rem 1.2rem;
+            margin: 0.7rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--glass-border);
+        }
+
+        .earnings {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 1.1rem;
+            text-shadow: 0 0 10px rgba(230,126,34,0.3);
+        }
+
+        /* Speed Indicator - Enhanced */
+        .speed-indicator {
+            position: fixed;
+            top: 90px;
+            right: 15px;
+            background: var(--danger-gradient);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            border: 2px solid white;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(231,76,60,0.4);
+            animation: speedPulse 1s infinite;
+        }
+
+        @keyframes speedPulse {
+            0%,100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .speed-indicator:hover::after {
+            content: attr(data-speed);
+            position: absolute;
+            right: 50px;
+            background: var(--danger-gradient);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Main Content - Enhanced */
+        .main-content {
+            padding: 0 1rem 1rem;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Dashboard Stats - Enhanced with glass cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 1.2rem 0.5rem;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            background: rgba(255,255,255,0.15);
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-shadow: 0 0 15px rgba(230,126,34,0.3);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-mini {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 0.8rem 0.25rem;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+        }
+
+        .stat-mini-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--info);
+        }
+
+        .stat-mini-label {
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+
+        /* Active Trip Card - Enhanced */
+        .trip-card {
+            background: linear-gradient(135deg, var(--primary-light), #000);
+            border-radius: 30px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 2px solid var(--accent);
+            box-shadow: 0 15px 30px rgba(230,126,34,0.2);
+            animation: tripGlow 2s infinite;
+        }
+
+        @keyframes tripGlow {
+            0%,100% { box-shadow: 0 15px 30px rgba(230,126,34,0.2); }
+            50% { box-shadow: 0 20px 40px rgba(230,126,34,0.4); }
+        }
+
+        .trip-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+
+        .trip-header h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .trip-stage {
+            background: var(--accent-gradient);
+            padding: 0.3rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(230,126,34,0.3);
+        }
+
+        .trip-row {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.7rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .trip-row i { width: 25px; color: var(--accent); font-size: 1.1rem; }
+
+        .trip-detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .trip-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin-top: 1.2rem;
+        }
+
+        .trip-actions .btn {
+            padding: 0.7rem;
+            font-size: 0.75rem;
+            border-radius: 15px;
+        }
+
+        /* Job Card - Enhanced */
+        .job-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 5px solid var(--accent);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s;
+        }
+
+        .job-card:hover {
+            transform: translateX(5px);
+            background: rgba(255,255,255,0.15);
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .job-distance {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .job-distance small {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+            font-weight: normal;
+        }
+
+        .job-details {
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            padding: 1rem;
+            margin: 0.8rem 0;
+        }
+
+        .job-detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.4rem 0;
+            font-size: 0.9rem;
+        }
+
+        .job-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        /* METER PAGE - Enhanced */
+        .fare-display {
+            background: linear-gradient(135deg, var(--primary-light), #000);
+            border-radius: 40px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1.2rem;
+            border: 2px solid var(--accent);
+            box-shadow: 0 15px 30px rgba(230,126,34,0.2);
+        }
+
+        .fare-amount {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--accent);
+            text-shadow: 0 0 20px rgba(230,126,34,0.4);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .fare-details {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 1rem;
+            background: rgba(0,0,0,0.3);
+            padding: 0.8rem;
+            border-radius: 40px;
+            backdrop-filter: blur(5px);
+        }
+
+        .fare-detail-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .fare-detail-item i {
+            color: var(--accent);
+            margin-bottom: 0.2rem;
+            font-size: 1rem;
+        }
+
+        .fare-detail-item span {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .fare-detail-item small {
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+
+        .manual-fare-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1.2rem 0;
+        }
+
+        .manual-fare-row input {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid var(--accent);
+            border-radius: 20px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .manual-fare-row input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .manual-fare-row button {
+            width: 60px;
+            height: 60px;
+            background: var(--accent-gradient);
+            border: none;
+            border-radius: 20px;
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(230,126,34,0.3);
+        }
+
+        .meter-controls {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 1.2rem;
+            margin-bottom: 1.2rem;
+            border: 1px solid var(--glass-border);
+        }
+
+        .control-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .control-row:last-child { border-bottom: none; }
+
+        .control-label {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-weight: 500;
+        }
+
+        .control-label i {
+            color: var(--accent);
+            width: 25px;
+            font-size: 1.1rem;
+        }
+
+        .control-input select {
+            padding: 0.8rem;
+            border-radius: 15px;
+            border: 2px solid var(--accent);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            font-weight: 500;
+        }
+
+        .waiting-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0,0,0,0.3);
+            padding: 0.3rem;
+            border-radius: 40px;
+            border: 1px solid var(--accent);
+        }
+
+        .waiting-btn {
+            background: var(--info-gradient);
+            color: white;
+            border: none;
+            border-radius: 40px;
+            padding: 0.7rem 1.2rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-weight: 600;
+        }
+
+        .waiting-btn.active {
+            background: var(--warning-gradient);
+            animation: pulse 1s infinite;
+        }
+
+        .waiting-time-display {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: rgba(0,0,0,0.5);
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+        }
+
+        .waiting-time {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent);
+            min-width: 45px;
+            text-align: center;
+        }
+
+        .passenger-control {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(0,0,0,0.3);
+            padding: 0.3rem;
+            border-radius: 40px;
+        }
+
+        .passenger-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .passenger-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .passenger-count {
+            font-size: 1.4rem;
+            font-weight: 700;
+            min-width: 35px;
+            text-align: center;
+        }
+
+        .meter-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin: 1.2rem 0;
+        }
+
+        .meter-buttons .btn {
+            padding: 0.9rem 0.5rem;
+            font-size: 0.8rem;
+            border-radius: 15px;
+        }
+
+        .fare-breakdown {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 1.2rem;
+            border: 1px solid var(--glass-border);
+        }
+
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.7rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.95rem;
+        }
+
+        .breakdown-row.total {
+            font-weight: 800;
+            color: var(--accent);
+            font-size: 1.2rem;
+            border-bottom: none;
+            padding-top: 0.7rem;
+        }
+
+        /* PAYMENT SECTION - Enhanced */
+        .payment-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 1.2rem;
+            margin: 1rem 0;
+            display: none;
+            border: 2px solid var(--accent);
+        }
+
+        .payment-section.active { display: block; animation: slideDown 0.3s ease; }
+
+        .payment-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .payment-header i {
+            color: var(--accent);
+            font-size: 1.3rem;
+        }
+
+        .payment-header h4 { font-size: 1.1rem; }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .payment-method {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 1rem 0.3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            opacity: 0.8;
+        }
+
+        .payment-method:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-3px);
+        }
+
+        .payment-method i {
+            font-size: 1.6rem;
+            margin-bottom: 0.3rem;
+            display: block;
+        }
+
+        .payment-method.visa i { color: #1a1f71; }
+        .payment-method.mastercard i { color: #eb001b; }
+        .payment-method.amex i { color: #006fcf; }
+        .payment-method.paypal i { color: #003087; }
+        .payment-method.cash i { color: #27ae60; }
+
+        .payment-method span { font-size: 0.7rem; display: block; }
+        .not-available { font-size: 0.6rem; color: var(--warning); margin-top: 0.2rem; }
+
+        .payment-note {
+            text-align: center;
+            color: var(--warning);
+            font-size: 0.8rem;
+            padding: 0.5rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 15px;
+            margin-top: 0.5rem;
+        }
+
+        /* GPS Buttons - Enhanced */
+        .gps-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .gps-btn {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.2rem 0.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .gps-btn:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-3px);
+        }
+
+        .gps-btn i { font-size: 2.2rem; margin-bottom: 0.3rem; }
+        .gps-btn.waze i { color: #33ccff; }
+        .gps-btn.apple i { color: #ffffff; }
+        .gps-btn.google i { color: #34a853; }
+
+        .gps-btn span { font-size: 0.8rem; font-weight: 600; }
+
+        /* Safety Grid - Enhanced */
+        .safety-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+        }
+
+        .safety-btn {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 1.8rem 0.5rem;
+            text-align: center;
+            cursor: pointer;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s;
+        }
+
+        .safety-btn:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.15);
+        }
+
+        .safety-btn i { font-size: 2.5rem; color: var(--accent); margin-bottom: 0.5rem; }
+        .safety-btn.emergency i { color: var(--danger); }
+        .safety-btn.panic i { 
+            color: var(--danger); 
+            animation: panicPulse 1s infinite;
+        }
+
+        @keyframes panicPulse {
+            0%,100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .safety-btn h4 { font-size: 1rem; }
+
+        /* Profile Page - Enhanced */
+        .profile-header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--glass-border);
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.2rem;
+            border: 4px solid white;
+            box-shadow: 0 15px 30px rgba(230,126,34,0.4);
+        }
+
+        .profile-stats {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 1.2rem;
+            border: 1px solid var(--glass-border);
+        }
+
+        .profile-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.9rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .profile-row:last-child { border-bottom: none; }
+
+        /* JOB ALERT MODAL - Enhanced */
+        .job-alert {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            animation: fadeIn 0.3s;
+        }
+
+        .alert-content {
+            background: linear-gradient(135deg, var(--accent), #d35400);
+            border-radius: 50px;
+            padding: 2.5rem;
+            width: 90%;
+            max-width: 380px;
+            text-align: center;
+            border: 4px solid white;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            animation: alertPulse 2s infinite;
+        }
+
+        @keyframes alertPulse {
+            0%,100% { transform: scale(1); box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
+            50% { transform: scale(1.02); box-shadow: 0 40px 80px rgba(0,0,0,0.6); }
+        }
+
+        .bird-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: chirp 0.5s ease infinite;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+        }
+
+        @keyframes chirp {
+            0%,100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(5deg); }
+        }
+
+        .alert-timer {
+            font-size: 4rem;
+            font-weight: 900;
+            margin: 1rem 0;
+            background: rgba(0,0,0,0.3);
+            border-radius: 30px;
+            padding: 0.5rem;
+            border: 3px solid white;
+            color: white;
+            font-family: monospace;
+        }
+
+        .alert-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+        }
+
+        .alert-actions .btn {
+            padding: 1.2rem;
+            font-size: 1.2rem;
+            font-weight: 800;
+            border-radius: 30px;
+        }
+
+        /* Modals - Enhanced */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #fff, #f5f5f5);
+            border-radius: 40px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 380px;
+            color: var(--dark);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            border: 2px solid var(--accent);
+        }
+
+        .modal-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+        }
+
+        /* Commercial Ad Banner - Enhanced */
+        .ad-banner {
+            background: linear-gradient(135deg, #f97316, #eab308);
+            border-radius: 40px;
+            padding: 0.7rem 1.2rem;
+            margin: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 8px 20px rgba(249,115,22,0.3);
+        }
+
+        .ad-banner i { font-size: 1.3rem; color: white; }
+
+        .marquee {
+            overflow: hidden;
+            white-space: nowrap;
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        .marquee span {
+            display: inline-block;
+            animation: marquee 15s linear infinite;
+            font-weight: 600;
+        }
+
+        @keyframes marquee {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-100%); }
+        }
+
+        /* Wake Lock Indicator - Enhanced */
+        .wake-lock-indicator {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            background: var(--accent-gradient);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 1000;
+            box-shadow: 0 8px 20px rgba(230,126,34,0.3);
+            border: 1px solid rgba(255,255,255,0.3);
+            font-weight: 600;
+        }
+
+        .wake-lock-indicator i { font-size: 1rem; }
+
+        /* Responsive */
+        @media (max-width: 380px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .trip-actions { grid-template-columns: repeat(2, 1fr); }
+            .meter-buttons { grid-template-columns: repeat(2, 1fr); }
+            .payment-methods { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hidden Audio Elements with multiple sources for better compatibility -->
+    <audio id="birdSound" preload="auto" loop="false" style="display: none;">
+        <source src="https://www.soundjay.com/misc/sounds/bird-01.mp3" type="audio/mpeg">
+        <source src="https://www.soundjay.com/misc/sounds/bird-01.ogg" type="audio/ogg">
+    </audio>
+    <audio id="notificationSound" preload="auto" loop="false" style="display: none;">
+        <source src="https://www.soundjay.com/misc/sounds/bell-ringing-01.mp3" type="audio/mpeg">
+        <source src="https://www.soundjay.com/misc/sounds/bell-ringing-01.ogg" type="audio/ogg">
+    </audio>
+    <audio id="panicSound" preload="auto" loop="false" style="display: none;">
+        <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen">
+        <div class="login-container">
+            <div class="movex-logo">
+                <div style="position: relative;">
+                    <span class="move-text">M
+                        <span class="o-container">
+                            O
+                            <div class="o-ring"></div>
+                        </span>
+                        VE
+                    </span>
+                </div>
+                <div style="position: relative;">
+                    <span class="x-letter">X</span>
+                </div>
+            </div>
+            
+            <div class="welcome-text">Welcome to MoveX Driver Pro</div>
+            
+            <!-- Powered by Zlink Technology - Enhanced -->
+            <div class="powered-by-container">
+                <span class="powered-by-text">powered by</span>
+                <span class="zlink-highlight">Zlink Technology</span>
+            </div>
+            
+            <div id="loginError" class="hidden" style="background: var(--danger); color: white; padding: 0.8rem; border-radius: 15px; margin-bottom: 1rem; text-align: center;">
+                Invalid credentials
+            </div>
+
+            <input type="text" id="driverName" class="login-input" placeholder="Driver Name" autocomplete="off">
+            <input type="password" id="password" class="login-input" placeholder="Password" autocomplete="off">
+            
+            <button class="btn btn-primary" onclick="login()">
+                <i class="fas fa-sign-in-alt"></i> LOGIN
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="app" class="hidden">
+        <!-- Wake Lock Indicator - Shows when active -->
+        <div id="wakeLockIndicator" class="wake-lock-indicator hidden">
+            <i class="fas fa-moon"></i>
+            <span>Active</span>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <div class="connection-bar">
+                <div class="connection-status">
+                    <div class="connection-dot" id="connectionDot"></div>
+                    <span class="connection-text" id="connectionText">Connecting...</span>
+                </div>
+                <div class="driver-badge">
+                    <i class="fas fa-user"></i>
+                    <span id="driverNameSmall">Driver</span>
+                </div>
+            </div>
+
+            <div class="driver-info-row">
+                <div class="driver-details">
+                    <div class="driver-avatar" id="driverAvatar"></div>
+                    <div class="driver-text">
+                        <h3 id="driverNameDisplay"></h3>
+                        <p><i class="fas fa-id-card"></i> <span id="driverId"></span></p>
+                    </div>
+                </div>
+                <div class="header-icons">
+                    <div class="icon-btn" onclick="showNotifications()">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge" id="notificationBadge">0</span>
+                    </div>
+                    <div class="icon-btn" onclick="showConnectionModal()">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <div class="nav-tabs">
+                <div class="nav-tab active" onclick="switchPage('dashboard')" id="homeTab">
+                    <i class="fas fa-home"></i>
+                    <span>HOME</span>
+                </div>
+                <div class="nav-tab" onclick="switchPage('jobs')">
+                    <i class="fas fa-briefcase"></i>
+                    <span>JOBS</span>
+                </div>
+                <div class="nav-tab" onclick="switchPage('meter')">
+                    <i class="fas fa-calculator"></i>
+                    <span>METER</span>
+                </div>
+                <div class="nav-tab" onclick="switchPage('map')">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <span>MAP</span>
+                </div>
+                <div class="nav-tab" onclick="switchPage('safety')">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>SAFETY</span>
+                </div>
+                <div class="nav-tab" onclick="switchPage('profile')">
+                    <i class="fas fa-user"></i>
+                    <span>PROFILE</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span><i class="fas fa-clock"></i> <span id="currentTime"></span></span>
+            <span class="earnings" id="earningsDisplay">$0.00</span>
+        </div>
+
+        <!-- Commercial Ad Banner -->
+        <div id="adBanner" class="ad-banner">
+            <i class="fas fa-ad"></i>
+            <div class="marquee">
+                <span id="adText">Welcome to MoveX Dispatch - Safe & Reliable Rides</span>
+            </div>
+        </div>
+
+        <!-- Speed Indicator -->
+        <div id="speedIndicator" class="speed-indicator" data-speed="" onclick="toggleSpeedAlert()">
+            <i class="fas fa-tachometer-alt"></i>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- DASHBOARD PAGE -->
+            <div id="dashboardPage" class="page active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="todayTrips">0</div>
+                        <div class="stat-label">TODAY</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="weeklyTrips">0</div>
+                        <div class="stat-label">WEEK</div>
+                    </div>
+                </div>
+                
+                <div class="stats-row">
+                    <div class="stat-mini">
+                        <div class="stat-mini-value" id="driverRating">4.9</div>
+                        <div class="stat-mini-label">RATING</div>
+                    </div>
+                    <div class="stat-mini">
+                        <div class="stat-mini-value" id="acceptRate">98%</div>
+                        <div class="stat-mini-label">ACCEPT</div>
+                    </div>
+                    <div class="stat-mini">
+                        <div class="stat-mini-value" id="onlineTime">0h</div>
+                        <div class="stat-mini-label">ONLINE</div>
+                    </div>
+                </div>
+
+                <!-- Active Trip Card -->
+                <div id="activeTripCard" class="trip-card hidden">
+                    <div class="trip-header">
+                        <h3>ACTIVE TRIP</h3>
+                        <span class="trip-stage" id="tripStage">ACCEPTED</span>
+                    </div>
+                    
+                    <div class="trip-row">
+                        <i class="fas fa-user"></i>
+                        <span id="tripCustomer">-</span>
+                    </div>
+                    
+                    <div class="trip-detail-row">
+                        <span>📞 Phone:</span>
+                        <span id="tripCustomerPhone">-</span>
+                    </div>
+                    
+                    <div class="trip-row">
+                        <i class="fas fa-map-marker-alt" style="color: #27ae60;"></i>
+                        <span id="tripPickup">-</span>
+                    </div>
+                    
+                    <div class="trip-row">
+                        <i class="fas fa-flag-checkered" style="color: #e74c3c;"></i>
+                        <span id="tripDestination">-</span>
+                    </div>
+                    
+                    <div class="trip-row">
+                        <i class="fas fa-dollar-sign"></i>
+                        <span id="tripFare">$0.00</span>
+                    </div>
+
+                    <div class="trip-actions">
+                        <button class="btn btn-warning" onclick="arriveAtPickup()" id="arriveBtn">ARRIVE</button>
+                        <button class="btn btn-success" onclick="boardPassenger()" id="boardBtn" disabled>BOARD</button>
+                        <button class="btn btn-primary" onclick="startTrip()" id="startBtn" disabled>START</button>
+                        <button class="btn btn-danger" onclick="completeTrip()" id="completeBtn" disabled>END</button>
+                    </div>
+                    <button class="btn btn-danger" onclick="cancelTrip()" style="margin-top: 0.5rem;">CANCEL</button>
+                </div>
+
+                <h3 style="margin-bottom: 0.5rem;">📋 RECENT JOBS</h3>
+                <div id="availableJobs" class="jobs-list"></div>
+            </div>
+
+            <!-- JOBS PAGE -->
+            <div id="jobsPage" class="page">
+                <h3 style="margin-bottom: 1rem;">📋 AVAILABLE JOBS</h3>
+                <div id="allJobs" class="jobs-list"></div>
+            </div>
+
+            <!-- METER PAGE -->
+            <div id="meterPage" class="page">
+                <div class="fare-display">
+                    <div class="fare-amount" id="currentFare">$0.00</div>
+                    
+                    <div class="fare-details">
+                        <div class="fare-detail-item">
+                            <i class="fas fa-clock"></i>
+                            <span id="tripTime">00:00</span>
+                            <small>TIME</small>
+                        </div>
+                        <div class="fare-detail-item">
+                            <i class="fas fa-road"></i>
+                            <span id="tripDistance">0.0</span>
+                            <small>MI</small>
+                        </div>
+                        <div class="fare-detail-item">
+                            <i class="fas fa-hourglass-half"></i>
+                            <span id="waitingTimeDisplay">0</span>
+                            <small>WAIT</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Manual Fare Input -->
+                <div class="manual-fare-row">
+                    <input type="number" id="manualFareAmount" placeholder="Manual amount" step="0.01" min="0">
+                    <button onclick="setManualFare()"><i class="fas fa-check"></i></button>
+                </div>
+
+                <div class="meter-controls">
+                    <div class="control-row">
+                        <div class="control-label">
+                            <i class="fas fa-tag"></i>
+                            <span>Fare Type</span>
+                        </div>
+                        <div class="control-input">
+                            <select id="fareType" onchange="updateFare()">
+                                <option value="standard">Standard - $5.00</option>
+                                <option value="airport">Airport - $9.00</option>
+                                <option value="flat30">Flat Rate - $30.00</option>
+                                <option value="flat35">Flat Rate - $35.00</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="control-row">
+                        <div class="control-label">
+                            <i class="fas fa-hourglass-half"></i>
+                            <span>Waiting Time</span>
+                        </div>
+                        <div class="waiting-control">
+                            <button class="waiting-btn" onclick="toggleWaitingTime()" id="waitingBtn">
+                                <i class="fas fa-play"></i> START
+                            </button>
+                            <div class="waiting-time-display">
+                                <span class="waiting-time" id="waitingTimeValue">0</span>
+                                <span class="waiting-charge" id="waitingCharge">+$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="control-row">
+                        <div class="control-label">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Extra Passengers</span>
+                        </div>
+                        <div class="passenger-control">
+                            <button class="passenger-btn" onclick="changePassengers(-1)" id="passengerMinus" disabled>-</button>
+                            <span class="passenger-count" id="extraPassengers">0</span>
+                            <button class="passenger-btn" onclick="changePassengers(1)" id="passengerPlus">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Meter Buttons -->
+                <div class="meter-buttons">
+                    <button class="btn btn-success" onclick="startMeter()" id="startMeterBtn">
+                        <i class="fas fa-play"></i> START
+                    </button>
+                    <button class="btn btn-warning" onclick="pauseMeter()" id="pauseMeterBtn" disabled>
+                        <i class="fas fa-pause"></i> PAUSE
+                    </button>
+                    <button class="btn btn-danger" onclick="resetMeter()" id="resetMeterBtn">
+                        <i class="fas fa-stop"></i> RESET
+                    </button>
+                    <button class="btn btn-payment" onclick="togglePaymentSection()" id="paymentBtn">
+                        <i class="fas fa-credit-card"></i> PAYMENT
+                    </button>
+                </div>
+
+                <!-- Fare Breakdown -->
+                <div class="fare-breakdown">
+                    <h4>FARE BREAKDOWN</h4>
+                    <div class="breakdown-row">
+                        <span>Base Fare:</span>
+                        <span id="breakdownBase">$0.00</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span>Distance ($2.50/mi):</span>
+                        <span id="breakdownDistance">$0.00</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span>Waiting ($0.35/min):</span>
+                        <span id="breakdownWaiting">$0.00</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span>Extra Passengers ($2.00):</span>
+                        <span id="breakdownPassengers">$0.00</span>
+                    </div>
+                    <div class="breakdown-row total">
+                        <span>TOTAL:</span>
+                        <span id="breakdownTotal">$0.00</span>
+                    </div>
+                </div>
+
+                <!-- PAYMENT SECTION -->
+                <div id="paymentSection" class="payment-section">
+                    <div class="payment-header">
+                        <i class="fas fa-credit-card"></i>
+                        <h4>Payment Processing</h4>
+                    </div>
+
+                    <!-- Payment Methods -->
+                    <div class="payment-methods">
+                        <div class="payment-method visa" onclick="showPaymentNotAvailable()">
+                            <i class="fab fa-cc-visa"></i>
+                            <span>Visa</span>
+                            <div class="not-available">Soon</div>
+                        </div>
+                        <div class="payment-method mastercard" onclick="showPaymentNotAvailable()">
+                            <i class="fab fa-cc-mastercard"></i>
+                            <span>Master</span>
+                            <div class="not-available">Soon</div>
+                        </div>
+                        <div class="payment-method amex" onclick="showPaymentNotAvailable()">
+                            <i class="fab fa-cc-amex"></i>
+                            <span>Amex</span>
+                            <div class="not-available">Soon</div>
+                        </div>
+                        <div class="payment-method paypal" onclick="showPaymentNotAvailable()">
+                            <i class="fab fa-cc-paypal"></i>
+                            <span>PayPal</span>
+                            <div class="not-available">Soon</div>
+                        </div>
+                        <div class="payment-method" onclick="showPaymentNotAvailable()">
+                            <i class="fab fa-paypal"></i>
+                            <span>Venmo</span>
+                            <div class="not-available">Soon</div>
+                        </div>
+                        <div class="payment-method" onclick="showPaymentNotAvailable()">
+                            <i class="fas fa-square"></i>
+                            <span>Square</span>
+                            <div class="not-available">Soon</div>
+                        </div>
+                        <div class="payment-method cash" onclick="showPaymentNotAvailable()">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Cash</span>
+                            <div class="not-available">Soon</div>
+                        </div>
+                    </div>
+
+                    <div class="payment-note">
+                        <i class="fas fa-info-circle"></i> Payment processing coming soon
+                    </div>
+                </div>
+            </div>
+
+            <!-- MAP PAGE -->
+            <div id="mapPage" class="page">
+                <h3 style="margin-bottom: 1rem;">🗺️ GPS NAVIGATION</h3>
+                
+                <div id="tripDestinationInfo" class="destination-info hidden">
+                    <p><i class="fas fa-map-marker-alt" style="color: #27ae60;"></i> <strong>Pickup:</strong> <span id="navPickup"></span></p>
+                    <p><i class="fas fa-flag-checkered" style="color: #e74c3c;"></i> <strong>Destination:</strong> <span id="navDestination"></span></p>
+                </div>
+
+                <div class="gps-buttons">
+                    <div class="gps-btn waze" onclick="openWaze()">
+                        <i class="fab fa-waze"></i>
+                        <span>WAZE</span>
+                    </div>
+                    <div class="gps-btn apple" onclick="openAppleMaps()">
+                        <i class="fab fa-apple"></i>
+                        <span>APPLE</span>
+                    </div>
+                    <div class="gps-btn google" onclick="openGoogleMaps()">
+                        <i class="fab fa-google"></i>
+                        <span>GOOGLE</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SAFETY PAGE -->
+            <div id="safetyPage" class="page">
+                <div class="safety-grid">
+                    <div class="safety-btn emergency" onclick="emergencyCall()">
+                        <i class="fas fa-phone-alt"></i>
+                        <h4>🚨 EMERGENCY</h4>
+                    </div>
+                    <div class="safety-btn" onclick="shareLocation()">
+                        <i class="fas fa-location-arrow"></i>
+                        <h4>📍 SHARE</h4>
+                    </div>
+                    <div class="safety-btn panic" onclick="triggerPanic()">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h4>⚠️ PANIC</h4>
+                    </div>
+                    <div class="safety-btn" onclick="showSafetyTips()">
+                        <i class="fas fa-shield-alt"></i>
+                        <h4>🛡️ TIPS</h4>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROFILE PAGE -->
+            <div id="profilePage" class="page">
+                <div class="profile-header">
+                    <div class="profile-avatar" id="profileAvatar"></div>
+                    <h3 id="profileName"></h3>
+                    <p id="profileId"></p>
+                </div>
+
+                <div class="profile-stats">
+                    <div class="profile-row">
+                        <span>Cab Number</span>
+                        <span id="profileCab"></span>
+                    </div>
+                    <div class="profile-row">
+                        <span>License</span>
+                        <span id="profileLicense"></span>
+                    </div>
+                    <div class="profile-row">
+                        <span>Phone</span>
+                        <span id="profilePhone"></span>
+                    </div>
+                    <div class="profile-row">
+                        <span>Email</span>
+                        <span id="profileEmail"></span>
+                    </div>
+                    <div class="profile-row">
+                        <span>Rating</span>
+                        <span id="profileRating">4.9 ★</span>
+                    </div>
+                    <div class="profile-row">
+                        <span>Total Trips</span>
+                        <span id="profileTrips">0</span>
+                    </div>
+                    <div class="profile-row">
+                        <span>Total Earnings</span>
+                        <span id="profileEarnings">$0.00</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="logout()" style="margin-top: 1rem;">
+                    <i class="fas fa-sign-out-alt"></i> LOGOUT
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JOB ALERT MODAL -->
+    <div id="jobAlert" class="job-alert hidden">
+        <div class="alert-content">
+            <div class="bird-icon">
+                <i class="fas fa-dove"></i>
+            </div>
+            <h2 style="color: white; font-size: 2.2rem; margin-bottom: 0.5rem;">NEW JOB!</h2>
+            <div class="alert-distance" id="alertDistance">2.3</div>
+            <div class="alert-label">miles away</div>
+            <div class="alert-timer" id="alertTimer">30</div>
+            <div class="alert-actions">
+                <button class="btn btn-success" onclick="acceptJob()">✅ ACCEPT</button>
+                <button class="btn btn-danger" onclick="declineJob()">❌ DECLINE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAYMENT NOT AVAILABLE MODAL -->
+    <div id="paymentNotAvailableModal" class="modal hidden">
+        <div class="modal-content">
+            <i class="fas fa-credit-card" style="font-size: 3rem; color: var(--warning); margin-bottom: 1rem; text-align: center; display: block;"></i>
+            <h3 style="text-align: center; color: var(--warning);">Payment Not Available</h3>
+            <p style="text-align: center; margin: 1rem 0;">Payment processing is currently under development. Please check back later.</p>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="closeModal('paymentNotAvailableModal')">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONNECTION MODAL -->
+    <div id="connectionModal" class="modal hidden">
+        <div class="modal-content">
+            <h3>CONNECTION STATUS</h3>
+            <p id="connectionStatus">Connected to MoveX Dispatch</p>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="reconnect()">RECONNECT</button>
+                <button class="btn btn-danger" onclick="closeModal('connectionModal')">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTIFICATIONS MODAL -->
+    <div id="notificationsModal" class="modal hidden">
+        <div class="modal-content">
+            <h3>NOTIFICATIONS</h3>
+            <div id="notificationsList" style="max-height: 300px; overflow-y: auto;"></div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="closeModal('notificationsModal')">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HISTORY MODAL -->
+    <div id="historyModal" class="modal hidden">
+        <div class="modal-content">
+            <h3>TRIP RECORDED</h3>
+            <p>Trip saved to MoveX Dispatch History</p>
+            <button class="btn btn-success" onclick="closeModal('historyModal')">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // =============================================
+        // MOVE X DRIVER APP - ENHANCED VERSION
+        // =============================================
+
+        // Global variables
+        let socket;
+        let currentUser = null;
+        let activeTrip = null;
+        let meterInterval = null;
+        let waitingInterval = null;
+        let meterRunning = false;
+        let waitingActive = false;
+        let waitingTime = 0;
+        let meterTime = 0;
+        let meterDistance = 0;
+        let extraPassengers = 0;
+        let currentJobAlert = null;
+        let notificationCount = 0;
+        let tripHistory = [];
+        let speedAlertEnabled = true;
+        let dispatchConnected = false;
+        let lastLocation = null;
+        let reconnectAttempts = 0;
+        let wakeLock = null;
+        let manualFareOverride = null;
+        let wakeLockInterval = null;
+        let backgroundAudio = null;
+        const MAX_RECONNECT_ATTEMPTS = 5;
+
+        // Audio elements
+        let birdAudio;
+        let notificationAudio;
+        let panicAudio;
+
+        // Fare rates
+        const FARE_RATES = {
+            perMile: 2.50,
+            passengerCharge: 2.00,
+            waitingCharge: 0.35,
+            standardBase: 5.00,
+            airportBase: 9.00,
+            flat30: 30.00,
+            flat35: 35.00
+        };
+
+        // Drivers database
+        const MOVE_DRIVERS = {
+            'ziad': { name: 'Ziad Ahmed', id: 'Z8888', cabNumber: 8888, license: 'DL1014', phone: '615-525-8619', email: 'zethio2000@gmail.com', address: '5112 Kensal Dr' },
+            'solomon': { name: 'Solomon Tadele', id: 'DRV044', cabNumber: 44, license: 'DL2229', phone: '615-497-3417', email: 'Gezai6701@gmail.com', address: '6701 Birchbrook Dr' },
+            'dessalegn': { name: 'Dessalegn Tolera', id: 'DRV070', cabNumber: 70, license: 'DL6644', phone: '615-525-7382', email: 'desalegni16@yahoo.com', address: '704 Winchester Pl' },
+            'dawit': { name: 'Dawit Mendesel', id: 'DRV071', cabNumber: 71, license: 'DL9478', phone: '615-499-2453', email: 'dawitmend@yahoo.com', address: '504 Gammon Lane' },
+            'abraham': { name: 'Abraham Solomon', id: 'DRV152', cabNumber: 152, license: 'DL3715', phone: '629-254-6858', email: 'Zgalsolomon@gmail.com', address: '7031 Alon Barayan Arch' }
+        };
+
+        // =============================================
+        // WAKE LOCK FOR BACKGROUND OPERATION
+        // =============================================
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    document.getElementById('wakeLockIndicator').classList.remove('hidden');
+                    
+                    wakeLock.addEventListener('release', () => {
+                        console.log('Wake Lock released');
+                        document.getElementById('wakeLockIndicator').classList.add('hidden');
+                    });
+                    
+                    console.log('Wake Lock active');
+                }
+            } catch (err) {
+                console.log('Wake Lock error:', err);
+            }
+        }
+
+        // Renew wake lock every minute
+        function startWakeLockRenewal() {
+            if (wakeLockInterval) clearInterval(wakeLockInterval);
+            wakeLockInterval = setInterval(async () => {
+                if (wakeLock && currentUser) {
+                    try {
+                        await requestWakeLock();
+                    } catch (err) {
+                        console.log('Wake Lock renewal failed:', err);
+                    }
+                }
+            }, 55000);
+        }
+
+        // =============================================
+        // PUSH NOTIFICATIONS FOR BACKGROUND
+        // =============================================
+        async function requestNotificationPermission() {
+            if ('Notification' in window) {
+                const permission = await Notification.requestPermission();
+                console.log('Notification permission:', permission);
+            }
+        }
+
+        function showBackgroundNotification(title, body) {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                const notification = new Notification(title, {
+                    body: body,
+                    icon: 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'45\' fill=\'%230a1a2a\'/%3E%3Ctext x=\'50\' y=\'70\' font-size=\'50\' text-anchor=\'middle\' fill=\'%23e67e22\' font-family=\'Arial\'%3EMX%3C/text%3E%3C/svg%3E',
+                    badge: 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'45\' fill=\'%230a1a2a\'/%3E%3Ctext x=\'50\' y=\'70\' font-size=\'50\' text-anchor=\'middle\' fill=\'%23e67e22\' font-family=\'Arial\'%3EMX%3C/text%3E%3C/svg%3E',
+                    vibrate: [200, 100, 200],
+                    requireInteraction: true,
+                    silent: false
+                });
+                
+                notification.onclick = function() {
+                    window.focus();
+                    this.close();
+                };
+            }
+        }
+
+        // =============================================
+        // ENHANCED AUDIO SYSTEM FOR BACKGROUND
+        // =============================================
+        function playBirdSound() {
+            // Try Web Audio API for better background support
+            try {
+                if (birdAudio) {
+                    birdAudio.currentTime = 0;
+                    
+                    // Create audio context for better mobile background support
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    if (audioContext.state === 'suspended') {
+                        audioContext.resume().then(() => {
+                            birdAudio.play().catch(e => {
+                                console.log('Audio play failed', e);
+                                useVibrationFallback();
+                                showBackgroundNotification('New Job Available!', 'A new trip is waiting for you');
+                            });
+                        });
+                    } else {
+                        birdAudio.play().catch(e => {
+                            console.log('Audio play failed', e);
+                            useVibrationFallback();
+                            showBackgroundNotification('New Job Available!', 'A new trip is waiting for you');
+                        });
+                    }
+                } else {
+                    useVibrationFallback();
+                    showBackgroundNotification('New Job Available!', 'A new trip is waiting for you');
+                }
+            } catch (e) {
+                console.log('Sound error:', e);
+                useVibrationFallback();
+                showBackgroundNotification('New Job Available!', 'A new trip is waiting for you');
+            }
+        }
+
+        function useVibrationFallback() {
+            if (navigator.vibrate) {
+                navigator.vibrate([500, 200, 500, 200, 500]);
+            }
+        }
+
+        function playNotificationSound() {
+            try {
+                if (notificationAudio) {
+                    notificationAudio.currentTime = 0;
+                    notificationAudio.play().catch(e => console.log('Notification sound failed', e));
+                }
+            } catch (e) {
+                console.log('Sound error:', e);
+            }
+        }
+
+        function playPanicSound() {
+            try {
+                if (panicAudio) {
+                    panicAudio.loop = true;
+                    panicAudio.play().catch(e => console.log('Panic sound failed', e));
+                }
+            } catch (e) {
+                console.log('Sound error:', e);
+                if (navigator.vibrate) {
+                    navigator.vibrate([1000, 500, 1000, 500, 1000]);
+                }
+            }
+        }
+
+        function stopPanicSound() {
+            if (panicAudio) {
+                panicAudio.pause();
+                panicAudio.currentTime = 0;
+            }
+        }
+
+        // =============================================
+        // INITIALIZATION
+        // =============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('MoveX Driver App starting...');
+            
+            // Initialize audio
+            birdAudio = document.getElementById('birdSound');
+            notificationAudio = document.getElementById('notificationSound');
+            panicAudio = document.getElementById('panicSound');
+            
+            // Request notification permission
+            requestNotificationPermission();
+            
+            // Enable audio on mobile
+            document.addEventListener('touchstart', function() {
+                [birdAudio, notificationAudio, panicAudio].forEach(audio => {
+                    if (audio) {
+                        audio.load();
+                        audio.play().catch(() => {}).then(() => {
+                            audio.pause();
+                            audio.currentTime = 0;
+                        });
+                    }
+                });
+            }, { once: true });
+            
+            // Check for saved session
+            checkSavedSession();
+            
+            // Connect to dispatch
+            connectToDispatch();
+            
+            // Update time
+            updateTime();
+            setInterval(updateTime, 1000);
+            
+            // Check speed
+            setInterval(checkSpeed, 5000);
+            
+            // Auto-start location
+            startLocationTracking();
+            
+            // Set up periodic connection check
+            setInterval(checkConnection, 30000);
+        });
+
+        // =============================================
+        // CONNECTION CHECK
+        // =============================================
+        function checkConnection() {
+            if (!socket || !socket.connected) {
+                console.log('Connection lost, attempting to reconnect...');
+                connectToDispatch();
+            }
+        }
+
+        // =============================================
+        // LOCATION TRACKING
+        // =============================================
+        function startLocationTracking() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        console.log('Location enabled');
+                        lastLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        startWatchingPosition();
+                    },
+                    function(error) {
+                        console.log('Location error:', error);
+                        lastLocation = { lat: 36.1627, lng: -86.7816 };
+                    },
+                    { enableHighAccuracy: true, timeout: 10000 }
+                );
+            } else {
+                lastLocation = { lat: 36.1627, lng: -86.7816 };
+            }
+        }
+
+        function startWatchingPosition() {
+            navigator.geolocation.watchPosition(
+                function(position) {
+                    lastLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    
+                    if (socket && socket.connected && currentUser) {
+                        socket.emit('location_share', {
+                            driverId: currentUser.id,
+                            lat: lastLocation.lat,
+                            lng: lastLocation.lng
+                        });
+                    }
+                },
+                function(error) { console.log('Watch error:', error); },
+                { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }
+            );
+        }
+
+        // =============================================
+        // DISPATCH CONNECTION - FIXED
+        // =============================================
+        function connectToDispatch() {
+            const serverUrl = 'https://movex-server-8fkl.onrender.com';
+            
+            console.log('Connecting to dispatch at:', dispatchUrl);
+            
+            try {
+                if (socket) {
+                    socket.disconnect();
+                }
+                
+                socket = io(dispatchUrl, {
+                    reconnection: true,
+                    reconnectionAttempts: 20,
+                    reconnectionDelay: 1000,
+                    reconnectionDelayMax: 5000,
+                    timeout: 20000,
+                    transports: ['websocket', 'polling']
+                });
+
+                socket.on('connect', function() {
+                    console.log('✅ Connected to MoveX Dispatch');
+                    dispatchConnected = true;
+                    reconnectAttempts = 0;
+                    updateConnectionStatus(true);
+                    
+                    // Request wake lock when connected
+                    if (currentUser) {
+                        requestWakeLock();
+                        startWakeLockRenewal();
+                    }
+                    
+                    if (currentUser) {
+                        console.log('Sending driver_online for:', currentUser.id);
+                        socket.emit('driver_online', {
+                            driverId: currentUser.id,
+                            name: currentUser.name,
+                            cabNumber: currentUser.cabNumber,
+                            location: lastLocation,
+                            timestamp: new Date().toISOString()
+                        });
+                    }
+                    
+                    addNotification('Connected to MoveX Dispatch');
+                    
+                    // Show ad banner when connected
+                    document.getElementById('adBanner').classList.remove('hidden');
+                });
+
+                socket.on('disconnect', function(reason) {
+                    console.log('❌ Disconnected:', reason);
+                    dispatchConnected = false;
+                    updateConnectionStatus(false);
+                    
+                    reconnectAttempts++;
+                    if (reconnectAttempts <= MAX_RECONNECT_ATTEMPTS) {
+                        addNotification('Disconnected - reconnecting...');
+                    }
+                });
+
+                socket.on('connect_error', function(error) {
+                    console.error('Connection error:', error);
+                    dispatchConnected = false;
+                    updateConnectionStatus(false);
+                });
+
+                // IMPORTANT: Listen for new jobs from dispatch
+                socket.on('new_job', function(jobData) {
+                    console.log('📦 NEW JOB RECEIVED:', jobData);
+                    
+                    // Play bird sound (works in background)
+                    playBirdSound();
+                    
+                    // Show background notification
+                    showBackgroundNotification(
+                        'New Job Available!', 
+                        `${jobData.customer} - ${jobData.distance} miles away`
+                    );
+                    
+                    if (!activeTrip) {
+                        handleIncomingJob(jobData);
+                    } else {
+                        socket.emit('driver_busy', {
+                            driverId: currentUser?.id,
+                            currentTripId: activeTrip.id
+                        });
+                    }
+                });
+
+                socket.on('commercial_ad', function(ad) {
+                    console.log('Commercial ad:', ad);
+                    showCommercialAd(ad);
+                });
+
+                socket.on('panic_acknowledged', function() {
+                    addNotification('🚨 Dispatch received panic alert!');
+                    stopPanicSound();
+                });
+
+                socket.on('fare_rates_updated', function(rates) {
+                    console.log('Fare rates updated:', rates);
+                    updateFareRates(rates);
+                });
+
+                socket.on('connection_ack', function(data) {
+                    console.log('Connection acknowledged:', data);
+                });
+
+            } catch (error) {
+                console.error('Connection error:', error);
+                updateConnectionStatus(false);
+                addNotification('Could not connect to dispatch');
+                setTimeout(connectToDispatch, 5000);
+            }
+        }
+
+        function updateConnectionStatus(connected) {
+            const dot = document.getElementById('connectionDot');
+            const text = document.getElementById('connectionText');
+            
+            if (connected) {
+                dot.className = 'connection-dot connected';
+                text.className = 'connection-text connected';
+                text.textContent = 'Connected to Dispatch';
+            } else {
+                dot.className = 'connection-dot disconnected';
+                text.className = 'connection-text disconnected';
+                text.textContent = 'Disconnected';
+            }
+        }
+
+        function reconnect() {
+            reconnectAttempts = 0;
+            connectToDispatch();
+            closeModal('connectionModal');
+        }
+
+        // =============================================
+        // LOGIN FUNCTIONS
+        // =============================================
+        function login() {
+            const name = document.getElementById('driverName').value.trim().toLowerCase();
+            const password = document.getElementById('password').value.trim();
+
+            const driver = MOVE_DRIVERS[name];
+            const isValid = driver && password === driver.license.slice(-4);
+
+            if (isValid) {
+                currentUser = {
+                    id: driver.id,
+                    name: driver.name,
+                    cabNumber: driver.cabNumber,
+                    license: driver.license,
+                    phone: driver.phone,
+                    email: driver.email,
+                    trips: parseInt(localStorage.getItem('movexTrips_' + driver.id)) || 0,
+                    earnings: parseFloat(localStorage.getItem('movexEarnings_' + driver.id)) || 0
+                };
+                
+                localStorage.setItem('movexDriver', JSON.stringify(currentUser));
+                showApp();
+                addNotification(`Welcome ${currentUser.name}!`);
+                playNotificationSound();
+                
+                // Request wake lock after login
+                requestWakeLock();
+                startWakeLockRenewal();
+                
+                if (socket && socket.connected) {
+                    console.log('Sending driver_online after login');
+                    socket.emit('driver_online', {
+                        driverId: currentUser.id,
+                        name: currentUser.name,
+                        cabNumber: currentUser.cabNumber,
+                        location: lastLocation,
+                        timestamp: new Date().toISOString()
+                    });
+                }
+            } else {
+                document.getElementById('loginError').classList.remove('hidden');
+            }
+        }
+
+        function checkSavedSession() {
+            const saved = localStorage.getItem('movexDriver');
+            if (saved) {
+                try {
+                    currentUser = JSON.parse(saved);
+                    showApp();
+                } catch (e) {}
+            }
+        }
+
+        function showApp() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('app').classList.remove('hidden');
+            updateUserInfo();
+        }
+
+        function updateUserInfo() {
+            if (!currentUser) return;
+            
+            const initials = currentUser.name.split(' ').map(n => n[0]).join('').substring(0, 2);
+            document.getElementById('driverAvatar').textContent = initials;
+            document.getElementById('profileAvatar').textContent = initials;
+            document.getElementById('driverNameDisplay').textContent = currentUser.name;
+            document.getElementById('driverNameSmall').textContent = currentUser.name.split(' ')[0];
+            document.getElementById('profileName').textContent = currentUser.name;
+            document.getElementById('driverId').textContent = currentUser.id;
+            document.getElementById('profileId').textContent = currentUser.id;
+            document.getElementById('profileCab').textContent = currentUser.cabNumber;
+            document.getElementById('profileLicense').textContent = '****' + currentUser.license.slice(-4);
+            document.getElementById('profilePhone').textContent = currentUser.phone;
+            document.getElementById('profileEmail').textContent = currentUser.email;
+            document.getElementById('todayTrips').textContent = currentUser.trips || 0;
+            document.getElementById('profileTrips').textContent = currentUser.trips || 0;
+            document.getElementById('earningsDisplay').textContent = `$${(currentUser.earnings || 0).toFixed(2)}`;
+            document.getElementById('profileEarnings').textContent = `$${(currentUser.earnings || 0).toFixed(2)}`;
+            document.getElementById('driverRating').textContent = currentUser.rating || 4.9;
+        }
+
+        // =============================================
+        // JOB HANDLING
+        // =============================================
+        function handleIncomingJob(jobData) {
+            if (activeTrip) return;
+            
+            currentJobAlert = {
+                id: jobData.id,
+                customer: jobData.customer,
+                phone: jobData.phone || 'N/A',
+                pickup: jobData.pickup,
+                destination: jobData.destination,
+                distance: jobData.distance || '2.5',
+                fare: jobData.fare || 25.00
+            };
+            
+            showJobAlert(currentJobAlert.distance);
+            addNotification(`New job: ${currentJobAlert.distance} miles away for ${currentJobAlert.customer}`);
+        }
+
+        function showJobAlert(distance) {
+            document.getElementById('alertDistance').textContent = distance;
+            document.getElementById('jobAlert').classList.remove('hidden');
+            
+            let timeLeft = 30;
+            const timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('alertTimer').textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    document.getElementById('jobAlert').classList.add('hidden');
+                    if (currentJobAlert) {
+                        addNotification('Job offer expired');
+                        socket.emit('job_expired', {
+                            jobId: currentJobAlert.id,
+                            driverId: currentUser?.id
+                        });
+                    }
+                    currentJobAlert = null;
+                }
+            }, 1000);
+        }
+
+        function acceptJob() {
+            document.getElementById('jobAlert').classList.add('hidden');
+            
+            if (!currentJobAlert) return;
+            
+            activeTrip = {
+                id: currentJobAlert.id,
+                customer: currentJobAlert.customer,
+                phone: currentJobAlert.phone,
+                pickup: currentJobAlert.pickup,
+                destination: currentJobAlert.destination,
+                fare: currentJobAlert.fare,
+                stage: 'accepted'
+            };
+            
+            showActiveTrip();
+            
+            if (socket && socket.connected) {
+                socket.emit('job_accepted', {
+                    jobId: currentJobAlert.id,
+                    driverId: currentUser.id,
+                    driverName: currentUser.name,
+                    timestamp: new Date().toISOString()
+                });
+            }
+            
+            addNotification('Job accepted! Proceed to pickup');
+            playNotificationSound();
+            
+            switchPage('map');
+            document.getElementById('tripDestinationInfo').classList.remove('hidden');
+            document.getElementById('navPickup').textContent = activeTrip.pickup;
+            document.getElementById('navDestination').textContent = activeTrip.destination;
+            document.getElementById('tripCustomerPhone').textContent = activeTrip.phone;
+            
+            currentJobAlert = null;
+        }
+
+        function declineJob() {
+            document.getElementById('jobAlert').classList.add('hidden');
+            
+            if (socket && socket.connected && currentJobAlert) {
+                socket.emit('job_declined', {
+                    jobId: currentJobAlert.id,
+                    driverId: currentUser?.id,
+                    driverName: currentUser?.name
+                });
+            }
+            
+            addNotification('Job declined');
+            currentJobAlert = null;
+        }
+
+        function showActiveTrip() {
+            if (!activeTrip) return;
+            
+            document.getElementById('activeTripCard').classList.remove('hidden');
+            document.getElementById('tripCustomer').textContent = activeTrip.customer;
+            document.getElementById('tripCustomerPhone').textContent = activeTrip.phone;
+            document.getElementById('tripPickup').textContent = activeTrip.pickup;
+            document.getElementById('tripDestination').textContent = activeTrip.destination;
+            document.getElementById('tripFare').textContent = `$${activeTrip.fare.toFixed(2)}`;
+            document.getElementById('tripStage').textContent = 'ACCEPTED';
+        }
+
+        // =============================================
+        // TRIP STAGE FUNCTIONS
+        // =============================================
+        function arriveAtPickup() {
+            if (!activeTrip) return;
+            activeTrip.stage = 'arrived';
+            document.getElementById('tripStage').textContent = 'ARRIVED';
+            document.getElementById('arriveBtn').disabled = true;
+            document.getElementById('boardBtn').disabled = false;
+            
+            if (socket && socket.connected) {
+                socket.emit('trip_update', {
+                    tripId: activeTrip.id,
+                    stage: 'arrived'
+                });
+            }
+            
+            addNotification('Arrived at pickup');
+        }
+
+        function boardPassenger() {
+            if (!activeTrip) return;
+            activeTrip.stage = 'boarded';
+            document.getElementById('tripStage').textContent = 'BOARDED';
+            document.getElementById('boardBtn').disabled = true;
+            document.getElementById('startBtn').disabled = false;
+            
+            if (socket && socket.connected) {
+                socket.emit('trip_update', {
+                    tripId: activeTrip.id,
+                    stage: 'boarded'
+                });
+            }
+            
+            addNotification('Passenger boarded');
+        }
+
+        function startTrip() {
+            if (!activeTrip) return;
+            activeTrip.stage = 'started';
+            document.getElementById('tripStage').textContent = 'TRIP STARTED';
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('completeBtn').disabled = false;
+            startMeter();
+            
+            if (socket && socket.connected) {
+                socket.emit('trip_update', {
+                    tripId: activeTrip.id,
+                    stage: 'started'
+                });
+            }
+            
+            addNotification('Trip started');
+        }
+
+        function completeTrip() {
+            if (!activeTrip) return;
+            
+            const fare = parseFloat(document.getElementById('currentFare').textContent.replace('$', ''));
+            
+            currentUser.earnings = (currentUser.earnings || 0) + fare;
+            currentUser.trips = (currentUser.trips || 0) + 1;
+            
+            localStorage.setItem('movexDriver', JSON.stringify(currentUser));
+            localStorage.setItem('movexTrips_' + currentUser.id, currentUser.trips);
+            localStorage.setItem('movexEarnings_' + currentUser.id, currentUser.earnings);
+            
+            if (socket && socket.connected) {
+                socket.emit('trip_complete', {
+                    tripId: activeTrip.id,
+                    driverId: currentUser.id,
+                    fare: fare,
+                    distance: meterDistance
+                });
+            }
+            
+            document.getElementById('historyModal').classList.remove('hidden');
+            updateUserInfo();
+            document.getElementById('activeTripCard').classList.add('hidden');
+            document.getElementById('tripDestinationInfo').classList.add('hidden');
+            stopMeter();
+            resetMeter();
+            
+            addNotification(`Trip completed! Earned $${fare.toFixed(2)}`);
+            activeTrip = null;
+        }
+
+        function cancelTrip() {
+            if (!activeTrip || !confirm('Cancel this trip?')) return;
+            
+            if (socket && socket.connected) {
+                socket.emit('trip_cancelled', {
+                    tripId: activeTrip.id,
+                    driverId: currentUser.id
+                });
+            }
+            
+            document.getElementById('activeTripCard').classList.add('hidden');
+            document.getElementById('tripDestinationInfo').classList.add('hidden');
+            stopMeter();
+            resetMeter();
+            activeTrip = null;
+            addNotification('Trip cancelled');
+        }
+
+        // =============================================
+        // METER FUNCTIONS
+        // =============================================
+        function startMeter() {
+            if (meterRunning) return;
+            meterRunning = true;
+            meterInterval = setInterval(updateMeter, 1000);
+            document.getElementById('startMeterBtn').disabled = true;
+            document.getElementById('pauseMeterBtn').disabled = false;
+            addNotification('Meter started');
+        }
+
+        function pauseMeter() {
+            meterRunning = false;
+            clearInterval(meterInterval);
+            document.getElementById('startMeterBtn').disabled = false;
+            document.getElementById('pauseMeterBtn').disabled = true;
+            addNotification('Meter paused');
+        }
+
+        function resetMeter() {
+            stopMeter();
+            meterTime = 0;
+            meterDistance = 0;
+            waitingTime = 0;
+            extraPassengers = 0;
+            manualFareOverride = null;
+            
+            document.getElementById('tripTime').textContent = '00:00';
+            document.getElementById('tripDistance').textContent = '0.0';
+            document.getElementById('waitingTimeDisplay').textContent = '0';
+            document.getElementById('waitingTimeValue').textContent = '0';
+            document.getElementById('waitingCharge').textContent = '+$0.00';
+            document.getElementById('extraPassengers').textContent = '0';
+            document.getElementById('waitingBtn').innerHTML = '<i class="fas fa-play"></i> START';
+            document.getElementById('waitingBtn').className = 'waiting-btn';
+            document.getElementById('passengerMinus').disabled = true;
+            
+            if (waitingActive) stopWaitingTime();
+            updateFare();
+            addNotification('Meter reset');
+        }
+
+        function stopMeter() {
+            meterRunning = false;
+            clearInterval(meterInterval);
+            document.getElementById('startMeterBtn').disabled = false;
+            document.getElementById('pauseMeterBtn').disabled = true;
+        }
+
+        function updateMeter() {
+            meterTime++;
+            const minutes = Math.floor(meterTime / 60);
+            const seconds = meterTime % 60;
+            document.getElementById('tripTime').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (meterTime % 60 === 0 && activeTrip) {
+                meterDistance += 0.5;
+                document.getElementById('tripDistance').textContent = meterDistance.toFixed(1);
+            }
+            
+            updateFare();
+        }
+
+        function toggleWaitingTime() {
+            waitingActive ? stopWaitingTime() : startWaitingTime();
+        }
+
+        function startWaitingTime() {
+            if (waitingActive) return;
+            waitingActive = true;
+            
+            waitingInterval = setInterval(() => {
+                waitingTime++;
+                document.getElementById('waitingTimeDisplay').textContent = waitingTime;
+                document.getElementById('waitingTimeValue').textContent = waitingTime;
+                updateFare();
+            }, 60000);
+            
+            document.getElementById('waitingBtn').innerHTML = '<i class="fas fa-pause"></i> STOP';
+            document.getElementById('waitingBtn').classList.add('active');
+            addNotification('Waiting time started');
+        }
+
+        function stopWaitingTime() {
+            waitingActive = false;
+            clearInterval(waitingInterval);
+            document.getElementById('waitingBtn').innerHTML = '<i class="fas fa-play"></i> START';
+            document.getElementById('waitingBtn').classList.remove('active');
+            addNotification('Waiting time stopped');
+        }
+
+        function changePassengers(change) {
+            let newCount = extraPassengers + change;
+            if (newCount >= 0 && newCount <= 6) {
+                extraPassengers = newCount;
+                document.getElementById('extraPassengers').textContent = extraPassengers;
+                document.getElementById('passengerMinus').disabled = extraPassengers === 0;
+                document.getElementById('passengerPlus').disabled = extraPassengers === 6;
+                updateFare();
+            }
+        }
+
+        function updateFare() {
+            if (manualFareOverride !== null) {
+                document.getElementById('currentFare').textContent = `$${manualFareOverride.toFixed(2)}`;
+                document.getElementById('breakdownTotal').textContent = `$${manualFareOverride.toFixed(2)}`;
+                if (activeTrip) {
+                    document.getElementById('tripFare').textContent = `$${manualFareOverride.toFixed(2)}`;
+                }
+                return;
+            }
+
+            const fareType = document.getElementById('fareType').value;
+            
+            let baseFare = 0;
+            if (fareType === 'standard') baseFare = FARE_RATES.standardBase;
+            else if (fareType === 'airport') baseFare = FARE_RATES.airportBase;
+            else if (fareType === 'flat30') baseFare = FARE_RATES.flat30;
+            else if (fareType === 'flat35') baseFare = FARE_RATES.flat35;
+            
+            const distanceCharge = meterDistance * FARE_RATES.perMile;
+            const waitingCharge = waitingTime * FARE_RATES.waitingCharge;
+            const passengerCharge = extraPassengers * FARE_RATES.passengerCharge;
+            
+            const total = baseFare + distanceCharge + waitingCharge + passengerCharge;
+            
+            document.getElementById('currentFare').textContent = `$${total.toFixed(2)}`;
+            document.getElementById('breakdownBase').textContent = `$${baseFare.toFixed(2)}`;
+            document.getElementById('breakdownDistance').textContent = `$${distanceCharge.toFixed(2)}`;
+            document.getElementById('breakdownWaiting').textContent = `$${waitingCharge.toFixed(2)}`;
+            document.getElementById('breakdownPassengers').textContent = `$${passengerCharge.toFixed(2)}`;
+            document.getElementById('breakdownTotal').textContent = `$${total.toFixed(2)}`;
+            document.getElementById('waitingCharge').textContent = `+$${waitingCharge.toFixed(2)}`;
+            
+            if (activeTrip) {
+                document.getElementById('tripFare').textContent = `$${total.toFixed(2)}`;
+            }
+        }
+
+        function setManualFare() {
+            const amount = parseFloat(document.getElementById('manualFareAmount').value);
+            if (!isNaN(amount) && amount >= 0) {
+                manualFareOverride = amount;
+                const impliedMiles = amount / FARE_RATES.perMile;
+                updateFare();
+                addNotification(`Manual fare set to $${amount.toFixed(2)}`);
+                document.getElementById('manualFareAmount').value = '';
+            }
+        }
+
+        function updateFareRates(rates) {
+            if (rates.standardBase) FARE_RATES.standardBase = parseFloat(rates.standardBase);
+            if (rates.airportBase) FARE_RATES.airportBase = parseFloat(rates.airportBase);
+            if (rates.perMile) FARE_RATES.perMile = parseFloat(rates.perMile);
+            if (rates.passengerCharge) FARE_RATES.passengerCharge = parseFloat(rates.passengerCharge);
+            if (rates.waitingCharge) FARE_RATES.waitingCharge = parseFloat(rates.waitingCharge);
+            updateFare();
+            addNotification('Fare rates updated');
+        }
+
+        // =============================================
+        // PAYMENT FUNCTIONS
+        // =============================================
+        function togglePaymentSection() {
+            document.getElementById('paymentSection').classList.toggle('active');
+        }
+
+        function showPaymentNotAvailable() {
+            document.getElementById('paymentNotAvailableModal').classList.remove('hidden');
+        }
+
+        // =============================================
+        // SAFETY FUNCTIONS
+        // =============================================
+        function emergencyCall() {
+            if (confirm('Call 911?')) {
+                window.location.href = 'tel:911';
+                addNotification('Emergency call placed');
+            }
+        }
+
+        function shareLocation() {
+            if (lastLocation) {
+                if (socket && socket.connected) {
+                    socket.emit('location_share', {
+                        driverId: currentUser.id,
+                        lat: lastLocation.lat,
+                        lng: lastLocation.lng,
+                        timestamp: new Date().toISOString()
+                    });
+                    alert(`📍 Location shared with dispatch!\n\nLat: ${lastLocation.lat.toFixed(6)}\nLng: ${lastLocation.lng.toFixed(6)}`);
+                } else {
+                    alert('Not connected to dispatch');
+                }
+                addNotification('Location shared with dispatch');
+            } else {
+                alert('Location not available');
+            }
+        }
+
+        function triggerPanic() {
+            if (confirm('SEND PANIC ALERT to MoveX Dispatch?')) {
+                if (socket && socket.connected) {
+                    socket.emit('panic_alert', {
+                        driverId: currentUser.id,
+                        driverName: currentUser.name,
+                        cabNumber: currentUser.cabNumber,
+                        phone: currentUser.phone,
+                        location: lastLocation,
+                        timestamp: new Date().toISOString()
+                    });
+                    
+                    const panicDiv = document.createElement('div');
+                    panicDiv.style.cssText = `
+                        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                        background: var(--danger-gradient); color: white; padding: 2.5rem;
+                        border-radius: 50%; font-size: 4rem; z-index: 10002;
+                        animation: pulse 1s infinite; box-shadow: 0 0 50px rgba(231,76,60,0.5);
+                        border: 4px solid white;
+                    `;
+                    panicDiv.innerHTML = '🚨';
+                    document.body.appendChild(panicDiv);
+                    setTimeout(() => panicDiv.remove(), 5000);
+                    
+                    playPanicSound();
+                    addNotification('🚨 PANIC ALERT SENT');
+                } else {
+                    alert('Not connected to dispatch');
+                }
+            }
+        }
+
+        function showSafetyTips() {
+            alert('SAFETY TIPS:\n\n• Verify passenger identity\n• Keep doors locked\n• Share trip details with dispatch\n• Park in well-lit areas\n• Trust your instincts\n• Panic button sends immediate SOS');
+        }
+
+        // =============================================
+        // GPS NAVIGATION
+        // =============================================
+        function openWaze() {
+            if (!activeTrip) { alert('No active trip'); return; }
+            const dest = encodeURIComponent(activeTrip.destination + ', Nashville, TN');
+            window.open(`https://waze.com/ul?q=${dest}&navigate=yes`, '_system');
+        }
+
+        function openAppleMaps() {
+            if (!activeTrip) { alert('No active trip'); return; }
+            const dest = encodeURIComponent(activeTrip.destination + ', Nashville, TN');
+            window.open(`https://maps.apple.com/?daddr=${dest}&dirflg=d`, '_system');
+        }
+
+        function openGoogleMaps() {
+            if (!activeTrip) { alert('No active trip'); return; }
+            const dest = encodeURIComponent(activeTrip.destination + ', Nashville, TN');
+            window.open(`https://www.google.com/maps/dir/?api=1&destination=${dest}&travelmode=driving`, '_system');
+        }
+
+        // =============================================
+        // COMMERCIAL ADS
+        // =============================================
+        function showCommercialAd(ad) {
+            document.getElementById('adText').textContent = ad.text || 'Special offer from MoveX!';
+            document.getElementById('adBanner').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('adBanner').classList.add('hidden');
+            }, 30000);
+        }
+
+        // =============================================
+        // UTILITY FUNCTIONS
+        // =============================================
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function checkSpeed() {
+            if (!activeTrip) {
+                document.getElementById('speedIndicator').style.display = 'none';
+                return;
+            }
+            let speed = Math.floor(Math.random() * 70) + 30;
+            if (speed > 55 && speedAlertEnabled) {
+                document.getElementById('speedIndicator').style.display = 'flex';
+                document.getElementById('speedIndicator').setAttribute('data-speed', `${speed} mph`);
+            } else {
+                document.getElementById('speedIndicator').style.display = 'none';
+            }
+        }
+
+        function toggleSpeedAlert() {
+            speedAlertEnabled = !speedAlertEnabled;
+            if (!speedAlertEnabled) {
+                document.getElementById('speedIndicator').style.display = 'none';
+            }
+        }
+
+        function addNotification(message) {
+            notificationCount++;
+            document.getElementById('notificationBadge').textContent = notificationCount;
+            
+            const list = document.getElementById('notificationsList');
+            const div = document.createElement('div');
+            div.style.padding = '0.8rem';
+            div.style.borderBottom = '1px solid #eee';
+            div.innerHTML = `${message}<br><small style="color: #666;">${new Date().toLocaleTimeString()}</small>`;
+            list.insertBefore(div, list.firstChild);
+        }
+
+        function showNotifications() {
+            document.getElementById('notificationsModal').classList.remove('hidden');
+        }
+
+        function showConnectionModal() {
+            document.getElementById('connectionModal').classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function switchPage(page) {
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelector(`[onclick="switchPage('${page}')"]`).classList.add('active');
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(`${page}Page`).classList.add('active');
+        }
+
+        function logout() {
+            if (confirm('Logout from MoveX Dispatch?')) {
+                if (socket && socket.connected) {
+                    socket.emit('driver_offline', {
+                        driverId: currentUser.id,
+                        name: currentUser.name,
+                        timestamp: new Date().toISOString()
+                    });
+                }
+                
+                // Release wake lock
+                if (wakeLock) {
+                    wakeLock.release();
+                    wakeLock = null;
+                }
+                if (wakeLockInterval) {
+                    clearInterval(wakeLockInterval);
+                    wakeLockInterval = null;
+                }
+                
+                localStorage.removeItem('movexDriver');
+                location.reload();
+            }
+        }
+
+        // Make all functions global
+        window.login = login;
+        window.switchPage = switchPage;
+        window.arriveAtPickup = arriveAtPickup;
+        window.boardPassenger = boardPassenger;
+        window.startTrip = startTrip;
+        window.completeTrip = completeTrip;
+        window.cancelTrip = cancelTrip;
+        window.startMeter = startMeter;
+        window.pauseMeter = pauseMeter;
+        window.resetMeter = resetMeter;
+        window.toggleWaitingTime = toggleWaitingTime;
+        window.changePassengers = changePassengers;
+        window.updateFare = updateFare;
+        window.setManualFare = setManualFare;
+        window.emergencyCall = emergencyCall;
+        window.shareLocation = shareLocation;
+        window.triggerPanic = triggerPanic;
+        window.showSafetyTips = showSafetyTips;
+        window.openWaze = openWaze;
+        window.openAppleMaps = openAppleMaps;
+        window.openGoogleMaps = openGoogleMaps;
+        window.acceptJob = acceptJob;
+        window.declineJob = declineJob;
+        window.showNotifications = showNotifications;
+        window.showConnectionModal = showConnectionModal;
+        window.closeModal = closeModal;
+        window.reconnect = reconnect;
+        window.logout = logout;
+        window.toggleSpeedAlert = toggleSpeedAlert;
+        window.togglePaymentSection = togglePaymentSection;
+        window.showPaymentNotAvailable = showPaymentNotAvailable;
+    </script>
+</body>
+</html>
