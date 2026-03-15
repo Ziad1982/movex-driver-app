@@ -1503,9 +1503,15 @@
     </style>
 </head>
 <body>
-    <!-- Hidden Audio Elements -->
+    <!-- Hidden Audio Elements - ADDED meterSound and waitingSound for FIX 2 -->
     <audio id="birdSound" preload="auto" style="display: none;">
         <source src="https://www.soundjay.com/misc/sounds/bird-01.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="meterSound" preload="auto" style="display: none;">
+        <source src="https://www.soundjay.com/misc/sounds/beep-01a.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="waitingSound" preload="auto" style="display: none;">
+        <source src="https://www.soundjay.com/misc/sounds/timer-beep.mp3" type="audio/mpeg">
     </audio>
     <audio id="notificationSound" preload="auto" style="display: none;">
         <source src="https://www.soundjay.com/misc/sounds/bell-ringing-01.mp3" type="audio/mpeg">
@@ -2058,7 +2064,7 @@
         </div>
     </div>
 
-    <!-- CANCEL REQUEST MODAL (NEW) -->
+    <!-- CANCEL REQUEST MODAL -->
     <div id="cancelRequestModal" class="modal hidden">
         <div class="modal-content">
             <h3>CANCEL REQUEST</h3>
@@ -2113,7 +2119,7 @@
 
     <script>
         // =============================================
-        // MOVE X DRIVER APP - COMPLETE WITH ALL FIXES
+        // MOVE X DRIVER APP - COMPLETE WITH ALL 10 FIXES
         // =============================================
 
         // Global variables
@@ -2141,11 +2147,14 @@
         let wakeLock = null;
         let manualFareOverride = null;
         let audioContext = null;
-        let autoPriceCalculation = true; // Default to ON, can be toggled by dispatch
+        let autoPriceCalculation = true;
+        let jobTimer = null; // FIX 10: Timer for job expiration
         const MAX_RECONNECT_ATTEMPTS = 5;
 
-        // Audio elements
+        // Audio elements - ADDED meterSound and waitingSound
         let birdAudio;
+        let meterAudio;
+        let waitingAudio;
         let notificationAudio;
         let panicAudio;
         let messageAudio;
@@ -2171,36 +2180,32 @@
         };
 
         // =============================================
-        // FIX 1: REVERSE GEOCODING - Convert coordinates to addresses
+        // FIX 1: REVERSE GEOCODING - Get exact address from coordinates
         // =============================================
         async function getAddressFromCoords(lat, lng) {
             try {
-                // Using OpenStreetMap Nominatim API (free, no API key required)
                 const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`);
                 const data = await response.json();
                 
                 if (data && data.display_name) {
-                    // Limit to a reasonable length
                     return data.display_name.substring(0, 100);
                 }
-                return `${lat.toFixed(6)}, ${lng.toFixed(6)}`; // Fallback to coordinates
+                return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
             } catch (error) {
                 console.log('Reverse geocoding error:', error);
-                return `${lat.toFixed(6)}, ${lng.toFixed(6)}`; // Fallback to coordinates
+                return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
             }
         }
 
         // =============================================
-        // FIX 2 & 4: ENHANCED AUDIO FOR BACKGROUND PLAYBACK
+        // FIX 6: ENHANCED AUDIO FOR iOS
         // =============================================
         function initAudio() {
             try {
-                // Initialize Web Audio API for better mobile support
                 window.AudioContext = window.AudioContext || window.webkitAudioContext;
                 if (window.AudioContext) {
                     audioContext = new AudioContext();
                     
-                    // Keep audio context alive with periodic resumption
                     const resumeAudio = function() {
                         if (audioContext && audioContext.state === 'suspended') {
                             audioContext.resume().then(() => {
@@ -2209,12 +2214,10 @@
                         }
                     };
                     
-                    // Resume on any user interaction
                     document.addEventListener('touchstart', resumeAudio);
                     document.addEventListener('click', resumeAudio);
                     document.addEventListener('touchend', resumeAudio);
                     
-                    // Periodic resume to keep audio alive (every 10 seconds)
                     setInterval(resumeAudio, 10000);
                 }
             } catch (e) {
@@ -2222,11 +2225,10 @@
             }
         }
 
-        // FIX 4: Enhanced bird sound that works in background
+        // FIX 6: Enhanced bird sound for iOS
         function playBirdSound() {
             console.log('🎵 Playing bird sound...');
             
-            // Try to resume AudioContext if suspended
             if (audioContext && audioContext.state === 'suspended') {
                 audioContext.resume().then(() => {
                     playBirdSoundDirect();
@@ -2240,35 +2242,23 @@
 
         function playBirdSoundDirect() {
             if (birdAudio) {
-                // Reset to beginning
                 birdAudio.currentTime = 0;
                 birdAudio.volume = 1.0;
                 
-                // Try to play with multiple retry attempts
                 let playPromise = birdAudio.play();
                 
                 if (playPromise !== undefined) {
                     playPromise.then(() => {
-                        console.log('✅ Bird sound played successfully');
-                        
-                        // Vibrate for extra notification
-                        if (navigator.vibrate) {
-                            navigator.vibrate([200, 100, 200]);
-                        }
+                        console.log('✅ Bird sound played');
+                        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
                     }).catch(error => {
                         console.log('❌ Audio play failed:', error);
                         
-                        // Retry after a short delay
+                        // Retry after delay
                         setTimeout(() => {
                             birdAudio.play().catch(e => {
                                 console.log('Second attempt failed:', e);
-                                
-                                // Fallback: Vibrate pattern
-                                if (navigator.vibrate) {
-                                    navigator.vibrate([500, 200, 500, 200, 500]);
-                                }
-                                
-                                // Show notification as fallback
+                                if (navigator.vibrate) navigator.vibrate([500, 200, 500]);
                                 if (Notification.permission === 'granted') {
                                     new Notification('🚕 New Job Available!', {
                                         body: 'A new trip is waiting for you',
@@ -2279,16 +2269,27 @@
                         }, 100);
                     });
                 }
-            } else {
-                console.log('Bird audio element not found');
-                if (navigator.vibrate) {
-                    navigator.vibrate([500, 200, 500]);
-                }
+            }
+        }
+
+        // FIX 2: Meter sound
+        function playMeterSound() {
+            if (meterAudio) {
+                meterAudio.currentTime = 0;
+                meterAudio.play().catch(() => {});
+            }
+        }
+
+        // FIX 2: Waiting time sound
+        function playWaitingSound() {
+            if (waitingAudio) {
+                waitingAudio.currentTime = 0;
+                waitingAudio.play().catch(() => {});
             }
         }
 
         // =============================================
-        // FIX 3: WAKE LOCK - Keep app active in background
+        // FIX 3: WAKE LOCK - Keep app active
         // =============================================
         async function requestWakeLock() {
             try {
@@ -2300,7 +2301,6 @@
                         document.getElementById('wakeLockIndicator').classList.add('hidden');
                     });
                     
-                    // Re-acquire wake lock when page becomes visible
                     document.addEventListener('visibilitychange', async () => {
                         if (wakeLock !== null && document.visibilityState === 'visible') {
                             wakeLock = await navigator.wakeLock.request('screen');
@@ -2313,7 +2313,7 @@
         }
 
         // =============================================
-        // FIX 5: PROFILE PICTURE UPLOAD (Already exists)
+        // FIX 5: PROFILE PICTURE UPLOAD
         // =============================================
         function uploadProfilePic() {
             const input = document.getElementById('avatarUpload');
@@ -2326,13 +2326,10 @@
                     reader.onload = function(event) {
                         const imgData = event.target.result;
                         
-                        // Update both avatars
                         document.getElementById('driverAvatar').innerHTML = `<img src="${imgData}" alt="Profile">`;
                         document.getElementById('profileAvatar').innerHTML = `<img src="${imgData}" alt="Profile">`;
                         
-                        // Save to localStorage
                         localStorage.setItem('movexAvatar', imgData);
-                        
                         addNotification('Profile picture updated');
                     };
                     reader.readAsDataURL(file);
@@ -2341,7 +2338,7 @@
         }
 
         // =============================================
-        // MESSAGE CENTER FUNCTIONS (Already exists)
+        // MESSAGE CENTER FUNCTIONS
         // =============================================
         function toggleMessageCenter() {
             const center = document.getElementById('messageCenter');
@@ -2362,6 +2359,7 @@
             }
         }
 
+        // FIX 4: Enhanced sendMessage with acknowledgment
         function sendMessage() {
             const input = document.getElementById('messageInput');
             const text = input.value.trim();
@@ -2374,18 +2372,24 @@
                 sender: 'driver',
                 timestamp: new Date().toISOString(),
                 driverId: currentUser.id,
-                driverName: currentUser.name
-            };
-            
-            // Add to UI
-            addMessage(message);
-            
-            // Send to server
-            socket.emit('driver_message', {
-                text: text,
-                driverId: currentUser.id,
                 driverName: currentUser.name,
                 cabNumber: currentUser.cabNumber
+            };
+            
+            // Add to UI immediately
+            addMessage(message);
+            
+            // Send with acknowledgment
+            socket.emit('driver_message', message, (ack) => {
+                if (ack && ack.received) {
+                    console.log('Message delivered to dispatch');
+                } else {
+                    addNotification('Message failed to send - will retry');
+                    // Retry once
+                    setTimeout(() => {
+                        socket.emit('driver_message', message);
+                    }, 2000);
+                }
             });
             
             input.value = '';
@@ -2411,10 +2415,7 @@
             if (message.sender !== 'driver') {
                 messageCount++;
                 document.getElementById('messageBadge').textContent = messageCount;
-                if (messageAudio) {
-                    messageAudio.currentTime = 0;
-                    messageAudio.play().catch(() => {});
-                }
+                if (messageAudio) messageAudio.play().catch(() => {});
             }
         }
 
@@ -2427,29 +2428,30 @@
         }
 
         // =============================================
-        // INITIALIZATION - Enhanced with audio and wake lock
+        // INITIALIZATION
         // =============================================
         document.addEventListener('DOMContentLoaded', function() {
             console.log('MoveX Driver App starting...');
             
-            // Initialize audio system (FIX 4)
             initAudio();
             
-            // Initialize audio elements
+            // Initialize all audio elements
             birdAudio = document.getElementById('birdSound');
+            meterAudio = document.getElementById('meterSound');
+            waitingAudio = document.getElementById('waitingSound');
             notificationAudio = document.getElementById('notificationSound');
             panicAudio = document.getElementById('panicSound');
             messageAudio = document.getElementById('messageSound');
             
             // Preload audio
-            [birdAudio, notificationAudio, panicAudio, messageAudio].forEach(audio => {
+            [birdAudio, meterAudio, waitingAudio, notificationAudio, panicAudio, messageAudio].forEach(audio => {
                 if (audio) {
                     audio.load();
                     audio.volume = 1.0;
                 }
             });
             
-            // Request notification permission (FIX 4)
+            // Request notification permission
             if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
                 Notification.requestPermission();
             }
@@ -2457,7 +2459,7 @@
             // Enable audio on first user interaction
             const enableAudio = function() {
                 console.log('User interaction - enabling audio');
-                [birdAudio, notificationAudio, panicAudio, messageAudio].forEach(audio => {
+                [birdAudio, meterAudio, waitingAudio, notificationAudio, panicAudio, messageAudio].forEach(audio => {
                     if (audio) {
                         audio.play().catch(() => {}).then(() => {
                             audio.pause();
@@ -2473,10 +2475,8 @@
             document.addEventListener('touchstart', enableAudio, { once: true });
             document.addEventListener('click', enableAudio, { once: true });
             
-            // Check for saved session
             checkSavedSession();
             
-            // Load saved avatar
             const savedAvatar = localStorage.getItem('movexAvatar');
             if (savedAvatar) {
                 setTimeout(() => {
@@ -2485,23 +2485,12 @@
                 }, 500);
             }
             
-            // Connect to dispatch
             connectToDispatch();
-            
-            // Update time
             updateTime();
             setInterval(updateTime, 1000);
-            
-            // Check speed
             setInterval(checkSpeed, 5000);
-            
-            // Auto-start location
             startLocationTracking();
-            
-            // Request wake lock (FIX 3)
             requestWakeLock();
-            
-            // Set up periodic connection check
             setInterval(checkConnection, 30000);
         });
 
@@ -2516,7 +2505,7 @@
         }
 
         // =============================================
-        // FIX 1 & 12: LOCATION TRACKING with reverse geocoding
+        // FIX 1: LOCATION TRACKING with exact address
         // =============================================
         function startLocationTracking() {
             if (navigator.geolocation) {
@@ -2525,15 +2514,14 @@
                         console.log('Location enabled');
                         lastLocation = {
                             lat: position.coords.latitude,
-                            lng: position.coords.longitude
+                            lng: position.coords.longitude,
+                            accuracy: position.coords.accuracy
                         };
                         
-                        // Get address from coordinates (FIX 1)
                         getAddressFromCoords(lastLocation.lat, lastLocation.lng).then(address => {
                             console.log('Current address:', address);
                             lastAddress = address;
                             
-                            // Share initial location with address
                             if (socket && socket.connected && currentUser) {
                                 socket.emit('location_share', {
                                     driverId: currentUser.id,
@@ -2548,17 +2536,11 @@
                     },
                     function(error) {
                         console.log('Location error:', error);
-                        // Use default location as fallback
-                        lastLocation = { lat: 36.1627, lng: -86.7816 };
-                        lastAddress = 'Nashville, TN (Default)';
-                        console.log('Using default Nashville location');
+                        lastLocation = { lat: 36.0546, lng: -86.6714 }; // Antioch, TN
+                        lastAddress = 'Antioch, TN (Approximate)';
                     },
                     { enableHighAccuracy: true, timeout: 10000 }
                 );
-            } else {
-                // Fallback if GPS not supported
-                lastLocation = { lat: 36.1627, lng: -86.7816 };
-                lastAddress = 'Nashville, TN (Default)';
             }
         }
 
@@ -2567,10 +2549,11 @@
                 function(position) {
                     const newLocation = {
                         lat: position.coords.latitude,
-                        lng: position.coords.longitude
+                        lng: position.coords.lng,
+                        accuracy: position.coords.accuracy
                     };
                     
-                    // Update address every 30 seconds or when significant movement (FIX 1)
+                    // Update address when moving significantly
                     if (!lastLocation || 
                         Math.abs(newLocation.lat - lastLocation.lat) > 0.001 || 
                         Math.abs(newLocation.lng - lastLocation.lng) > 0.001) {
@@ -2601,7 +2584,6 @@
         // DISPATCH CONNECTION - FIXED URL
         // =============================================
         function connectToDispatch() {
-            // FIXED: Using correct backend URL
             const dispatchUrl = 'https://movex-server-8fkl.onrender.com';
             
             console.log('Connecting to dispatch at:', dispatchUrl);
@@ -2638,8 +2620,6 @@
                     }
                     
                     addNotification('Connected to MoveX Dispatch');
-                    
-                    // Show ad banner when connected
                     document.getElementById('adBanner').classList.remove('hidden');
                 });
 
@@ -2660,12 +2640,21 @@
                     updateConnectionStatus(false);
                 });
 
+                // FIX 8,9,10: Handle new job with distance
                 socket.on('new_job', function(jobData) {
                     console.log('📦 NEW JOB from dispatch:', jobData);
                     if (!activeTrip) {
                         handleIncomingJob(jobData);
-                        // Play bird sound (FIX 4)
                         playBirdSound();
+                        
+                        // FIX 10: Set timer for job expiration
+                        clearTimeout(jobTimer);
+                        jobTimer = setTimeout(() => {
+                            if (currentJobAlert && currentJobAlert.id === jobData.id) {
+                                declineJob();
+                                addNotification('Job offer expired');
+                            }
+                        }, 30000);
                     } else {
                         socket.emit('driver_busy', {
                             driverId: currentUser?.id,
@@ -2674,13 +2663,16 @@
                     }
                 });
 
-                // FIX 6: Listen for auto-price calculation setting
-                socket.on('auto_price_setting', function(data) {
-                    autoPriceCalculation = data.enabled;
-                    addNotification(`Auto price calculation ${autoPriceCalculation ? 'enabled' : 'disabled'}`);
+                // FIX 7: Handle redispatch
+                socket.on('redispatch', function(jobData) {
+                    console.log('🔄 REDISPATCH received:', jobData);
+                    if (!activeTrip) {
+                        handleIncomingJob(jobData);
+                        playBirdSound();
+                    }
                 });
 
-                // FIX 10: Listen for cancel approval
+                // FIX 10: Handle cancel approval
                 socket.on('cancel_approved', function(data) {
                     if (activeTrip && activeTrip.id === data.tripId) {
                         alert('Trip cancellation approved by dispatch');
@@ -2688,7 +2680,7 @@
                     }
                 });
 
-                // FIX 10: Listen for cancel rejection
+                // FIX 10: Handle cancel rejection
                 socket.on('cancel_rejected', function(data) {
                     if (activeTrip && activeTrip.id === data.tripId) {
                         alert('Trip cancellation rejected by dispatch. Please complete the trip.');
@@ -2708,6 +2700,7 @@
                     }
                 });
 
+                // FIX 5: Show commercial ad with correct text
                 socket.on('commercial_ad', function(ad) {
                     console.log('Commercial ad:', ad);
                     showCommercialAd(ad);
@@ -2734,20 +2727,13 @@
                 console.error('Connection error:', error);
                 updateConnectionStatus(false);
                 addNotification('Could not connect to dispatch');
-                
-                // Try again after 5 seconds
                 setTimeout(connectToDispatch, 5000);
             }
         }
 
         function updateConnectionStatus(connected) {
             const dot = document.getElementById('connectionDot');
-            
-            if (connected) {
-                dot.className = 'connection-dot connected';
-            } else {
-                dot.className = 'connection-dot disconnected';
-            }
+            dot.className = connected ? 'connection-dot connected' : 'connection-dot disconnected';
         }
 
         function reconnect() {
@@ -2782,7 +2768,6 @@
                 showApp();
                 addNotification(`Welcome ${currentUser.name}!`);
                 
-                // Load saved avatar
                 const savedAvatar = localStorage.getItem('movexAvatar');
                 if (savedAvatar) {
                     document.getElementById('driverAvatar').innerHTML = `<img src="${savedAvatar}" alt="Profile">`;
@@ -2842,7 +2827,7 @@
         }
 
         // =============================================
-        // JOB HANDLING - Updated with auto-price flag
+        // FIX 8,9,10: JOB HANDLING with distance and timer
         // =============================================
         function handleIncomingJob(jobData) {
             if (activeTrip) return;
@@ -2855,11 +2840,10 @@
                 destination: jobData.destination,
                 distance: jobData.distance || '2.5',
                 fare: jobData.fare || 25.00,
-                autoPrice: jobData.autoPrice !== undefined ? jobData.autoPrice : autoPriceCalculation // FIX 6
+                autoPrice: jobData.autoPrice !== undefined ? jobData.autoPrice : autoPriceCalculation
             };
             
             showJobAlert(currentJobAlert.distance);
-            // playBirdSound is called from socket.on('new_job') now
             addNotification(`New job: ${currentJobAlert.distance} miles away`);
         }
 
@@ -2874,48 +2858,65 @@
                 if (timeLeft <= 0) {
                     clearInterval(timer);
                     document.getElementById('jobAlert').classList.add('hidden');
+                    
+                    // Notify dispatch that job expired
+                    if (socket && socket.connected && currentJobAlert) {
+                        socket.emit('job_expired', {
+                            jobId: currentJobAlert.id,
+                            driverId: currentUser?.id
+                        });
+                    }
                     currentJobAlert = null;
                 }
             }, 1000);
         }
 
         function acceptJob() {
+            clearTimeout(jobTimer);
             document.getElementById('jobAlert').classList.add('hidden');
             
-            activeTrip = {
-                id: currentJobAlert.id,
-                customer: currentJobAlert.customer,
-                phone: currentJobAlert.phone,
-                pickup: currentJobAlert.pickup,
-                destination: currentJobAlert.destination,
-                fare: currentJobAlert.fare,
-                autoPrice: currentJobAlert.autoPrice, // FIX 6
-                stage: 'accepted',
-                cancelRequested: false // FIX 10
-            };
+            if (!currentJobAlert) return;
             
-            showActiveTrip();
+            // Send acceptance with acknowledgment
+            socket.emit('job_accepted', {
+                jobId: currentJobAlert.id,
+                driverId: currentUser.id,
+                driverName: currentUser.name,
+                location: { ...lastLocation, address: lastAddress },
+                timestamp: new Date().toISOString()
+            }, (ack) => {
+                if (ack && ack.success) {
+                    activeTrip = {
+                        id: currentJobAlert.id,
+                        customer: currentJobAlert.customer,
+                        phone: currentJobAlert.phone,
+                        pickup: currentJobAlert.pickup,
+                        destination: currentJobAlert.destination,
+                        fare: currentJobAlert.fare,
+                        autoPrice: currentJobAlert.autoPrice,
+                        stage: 'accepted',
+                        cancelRequested: false
+                    };
+                    
+                    showActiveTrip();
+                    addNotification('Job accepted');
+                    switchPage('map');
+                    
+                    document.getElementById('navPickup').textContent = activeTrip.pickup;
+                    document.getElementById('navDestination').textContent = activeTrip.destination;
+                    document.getElementById('tripCustomerPhone').textContent = activeTrip.phone;
+                } else {
+                    alert('This job is no longer available');
+                }
+            });
             
-            if (socket && socket.connected) {
-                socket.emit('job_accepted', {
-                    jobId: currentJobAlert.id,
-                    driverId: currentUser.id,
-                    driverName: currentUser.name,
-                    location: { ...lastLocation, address: lastAddress },
-                    timestamp: new Date().toISOString()
-                });
-            }
-            
-            addNotification('Job accepted');
-            switchPage('map');
-            document.getElementById('navPickup').textContent = activeTrip.pickup;
-            document.getElementById('navDestination').textContent = activeTrip.destination;
-            document.getElementById('tripCustomerPhone').textContent = activeTrip.phone;
             currentJobAlert = null;
         }
 
         function declineJob() {
+            clearTimeout(jobTimer);
             document.getElementById('jobAlert').classList.add('hidden');
+            
             if (socket && socket.connected && currentJobAlert) {
                 socket.emit('job_declined', {
                     jobId: currentJobAlert.id,
@@ -3027,7 +3028,7 @@
             activeTrip = null;
         }
 
-        // FIX 10: Request cancel instead of direct cancel
+        // FIX 3: Request cancel with acknowledgment
         function requestCancelTrip() {
             if (!activeTrip || activeTrip.cancelRequested) return;
             
@@ -3040,15 +3041,19 @@
                         driverId: currentUser.id,
                         driverName: currentUser.name,
                         location: { ...lastLocation, address: lastAddress }
+                    }, (ack) => {
+                        if (ack && ack.received) {
+                            document.getElementById('cancelRequestModal').classList.remove('hidden');
+                            addNotification('Cancel request sent to dispatch');
+                        } else {
+                            alert('Failed to send cancel request - please try again');
+                            activeTrip.cancelRequested = false;
+                        }
                     });
-                    
-                    document.getElementById('cancelRequestModal').classList.remove('hidden');
-                    addNotification('Cancel request sent to dispatch');
                 }
             }
         }
 
-        // Original cancel function (kept for internal use)
         function cancelTrip() {
             if (!activeTrip) return;
             
@@ -3059,7 +3064,7 @@
         }
 
         // =============================================
-        // FIX 11: METER FUNCTIONS - $2.50 per mile
+        // FIX 2 & 11: METER FUNCTIONS with sounds
         // =============================================
         function startMeter() {
             if (meterRunning) return;
@@ -3067,6 +3072,7 @@
             meterInterval = setInterval(updateMeter, 1000);
             document.getElementById('startMeterBtn').disabled = true;
             document.getElementById('pauseMeterBtn').disabled = false;
+            playMeterSound(); // FIX 2: Play sound when meter starts
             addNotification('Meter started');
         }
 
@@ -3115,9 +3121,9 @@
             document.getElementById('tripTime').textContent = 
                 `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             
-            // FIX 11: Add 1 mile per minute at 60 mph ($2.50 per mile)
+            // Add 1 mile per minute ($2.50 per mile)
             if (meterTime % 60 === 0 && activeTrip) {
-                meterDistance += 1.0; // 1 mile per minute
+                meterDistance += 1.0;
                 document.getElementById('tripDistance').textContent = meterDistance.toFixed(1);
             }
             
@@ -3125,7 +3131,7 @@
         }
 
         // =============================================
-        // WAITING TIME FUNCTIONS
+        // WAITING TIME FUNCTIONS with sound
         // =============================================
         function toggleWaitingTime() {
             waitingActive ? stopWaitingTime() : startWaitingTime();
@@ -3140,6 +3146,7 @@
                 document.getElementById('waitingTimeDisplay').textContent = waitingTime;
                 document.getElementById('waitingTimeValue').textContent = waitingTime;
                 updateFare();
+                playWaitingSound(); // FIX 2: Play sound every minute
             }, 60000);
             
             document.getElementById('waitingBtn').innerHTML = '<i class="fas fa-pause"></i> STOP';
@@ -3170,10 +3177,9 @@
         }
 
         // =============================================
-        // FIX 6 & 11: FARE FUNCTIONS - Updated with auto-price control
+        // FARE FUNCTIONS
         // =============================================
         function updateFare() {
-            // If manual override is set, use that
             if (manualFareOverride !== null) {
                 document.getElementById('currentFare').textContent = `$${manualFareOverride.toFixed(2)}`;
                 document.getElementById('breakdownTotal').textContent = `$${manualFareOverride.toFixed(2)}`;
@@ -3183,9 +3189,7 @@
                 return;
             }
 
-            // Only calculate fare if auto-price is enabled or no active trip
             if (activeTrip && activeTrip.autoPrice === false) {
-                // Auto-price is disabled for this trip, don't update
                 return;
             }
 
@@ -3197,7 +3201,7 @@
             else if (fareType === 'flat30') baseFare = FARE_RATES.flat30;
             else if (fareType === 'flat35') baseFare = FARE_RATES.flat35;
             
-            const distanceCharge = meterDistance * FARE_RATES.perMile; // $2.50 per mile
+            const distanceCharge = meterDistance * FARE_RATES.perMile;
             const waitingCharge = waitingTime * FARE_RATES.waitingCharge;
             const passengerCharge = extraPassengers * FARE_RATES.passengerCharge;
             
@@ -3221,13 +3225,11 @@
             if (!isNaN(amount) && amount >= 0) {
                 manualFareOverride = amount;
                 
-                // Calculate how many miles this would be at $2.50/mile
                 const impliedMiles = amount / FARE_RATES.perMile;
                 
                 updateFare();
                 addNotification(`Manual fare set to $${amount.toFixed(2)} (${impliedMiles.toFixed(1)} miles @ $2.50/mi)`);
                 
-                // Clear input
                 document.getElementById('manualFareAmount').value = '';
             }
         }
@@ -3256,7 +3258,7 @@
         }
 
         // =============================================
-        // FIX 12: SAFETY FUNCTIONS - Enhanced location sharing
+        // SAFETY FUNCTIONS
         // =============================================
         function emergencyCall() {
             if (confirm('Call 911?')) {
@@ -3278,7 +3280,6 @@
                         timestamp: new Date().toISOString()
                     });
                     
-                    // Show success message with address (FIX 1)
                     alert(`📍 Location shared with dispatch!\n\n${address}`);
                 } else {
                     alert('Not connected to dispatch. Location will be shared when connection is restored.');
@@ -3301,7 +3302,6 @@
                         timestamp: new Date().toISOString()
                     });
                     
-                    // Visual panic effect
                     const panicDiv = document.createElement('div');
                     panicDiv.style.cssText = `
                         position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -3313,7 +3313,6 @@
                     document.body.appendChild(panicDiv);
                     setTimeout(() => panicDiv.remove(), 5000);
                     
-                    // Play panic sound
                     if (panicAudio) {
                         panicAudio.loop = true;
                         panicAudio.play().catch(() => {
@@ -3360,16 +3359,15 @@
         }
 
         // =============================================
-        // COMMERCIAL ADS
+        // FIX 5: COMMERCIAL ADS - Show correct text
         // =============================================
         function showCommercialAd(ad) {
             document.getElementById('adText').textContent = ad.text || 'Special offer from MoveX!';
             document.getElementById('adBanner').classList.remove('hidden');
             
-            // Ad will auto-hide after 30 seconds
             setTimeout(() => {
                 document.getElementById('adBanner').classList.add('hidden');
-            }, 30000);
+            }, (ad.duration || 30) * 1000);
         }
 
         // =============================================
@@ -3386,7 +3384,6 @@
                 return;
             }
             
-            // Simulated speed (in production, get from GPS)
             let speed = Math.floor(Math.random() * 70) + 30;
             
             if (speed > 55 && speedAlertEnabled) {
@@ -3445,7 +3442,6 @@
                     });
                 }
                 
-                // Release wake lock
                 if (wakeLock) {
                     wakeLock.release();
                 }
