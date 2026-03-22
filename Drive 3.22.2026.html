@@ -1,0 +1,2943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    
+    <!-- MoveX Icons for Home Screen - ALL SIZES -->
+    <link rel="apple-touch-icon" sizes="57x57" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='57' height='57' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230a1a2a' stroke='%23e67e22' stroke-width='2'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='%23e67e22' font-family='Arial' font-weight='bold'%3EMX%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230a1a2a' stroke='%23e67e22' stroke-width='2'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='%23e67e22' font-family='Arial' font-weight='bold'%3EMX%3C/text%3E%3C/svg%3E">
+    <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230a1a2a' stroke='%23e67e22' stroke-width='2'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='%23e67e22' font-family='Arial' font-weight='bold'%3EMX%3C/text%3E%3C/svg%3E">
+    
+    <!-- FIXED PWA Manifest - Properly escaped -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "MoveX Driver",
+        "short_name": "MoveX",
+        "description": "MoveX Driver App - Connected to Dispatch",
+        "start_url": ".",
+        "display": "standalone",
+        "background_color": "#0a1a2a",
+        "theme_color": "#e67e22",
+        "orientation": "portrait",
+        "icons": [
+            {
+                "src": "data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'192\' height=\'192\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'45\' fill=\'%230a1a2a\' stroke=\'%23e67e22\' stroke-width=\'2\'/%3E%3Ctext x=\'50\' y=\'70\' font-size=\'50\' text-anchor=\'middle\' fill=\'%23e67e22\' font-family=\'Arial\' font-weight=\'bold\'%3EMX%3C/text%3E%3C/svg%3E",
+                "sizes": "192x192",
+                "type": "image/svg+xml"
+            }
+        ]
+    }'>
+
+    <!-- Meta tags for iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="MoveX Driver">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0a1a2a">
+    
+    <title>MoveX Driver - Connected</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Harlow+Solid+Italic&display=swap">
+    
+    <style>
+        /* ===== RESET & VARIABLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        :root {
+            --primary: #0a1a2a;
+            --secondary: #1a2a3a;
+            --accent: #e67e22;
+            --accent-light: #f39c12;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --info: #3498db;
+            --light: #ecf0f1;
+            --dark: #1e2b3a;
+            --gray: #7f8c8d;
+            --blue-glow: #3b82f6;
+            --orange-flame: #f97316;
+            --red-speed: #e74c3c;
+            --purple-glow: #8b5cf6;
+            --pink-glow: #d946ef;
+            --message-sent: #e67e22;
+            --message-received: #34495e;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            max-width: 500px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .hidden { display: none !important; }
+
+        /* ===== UPDATED MOVEX LOGO WITH DYNAMIC STYLING ===== */
+        .movex-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            position: relative;
+            margin-bottom: 0.5rem;
+        }
+
+        .move-text {
+            font-family: 'Harlow Solid Italic', 'Palatino Linotype', 'Book Antiqua', serif;
+            font-size: 3.2rem;
+            font-weight: 600;
+            background: linear-gradient(145deg, #3b82f6, #2575fc, #5fa4f8, #3b82f6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            transform: scale(1.05);
+            font-style: italic;
+        }
+
+        .o-container {
+            position: relative;
+            display: inline-block;
+            margin: 0 -3px;
+        }
+
+        .o-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 45px;
+            height: 45px;
+            border: 3px solid transparent;
+            border-top: 3px solid #3b82f6;
+            border-right: 3px solid #8b5cf6;
+            border-bottom: 3px solid #d946ef;
+            border-left: 3px solid #f97316;
+            border-radius: 50%;
+            animation: fastSpin 1.5s linear infinite;
+            opacity: 0.9;
+            box-shadow: 0 0 15px rgba(59,130,246,0.5);
+        }
+
+        .x-letter {
+            font-family: 'Arial Black', 'Poppins', 'Segoe UI', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 900;
+            background: linear-gradient(145deg, #f97316, #eab308, #f39c12, #e67e22);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            margin-left: -5px;
+            transform: scaleX(1.2) scaleY(1.1);
+            display: inline-block;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            letter-spacing: -5px;
+        }
+
+        /* Speed swoosh line */
+        .speed-swoosh {
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, #f1c40f, #e67e22, #e74c3c);
+            border-radius: 10px;
+            filter: blur(2px);
+            opacity: 0.7;
+            animation: swoosh 3s ease-in-out infinite;
+        }
+
+        @keyframes swoosh {
+            0%,100% { transform: scaleX(1); opacity: 0.7; }
+            50% { transform: scaleX(1.1); opacity: 1; }
+        }
+
+        .speed-lines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .speed-line {
+            position: absolute;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #f97316, #eab308, transparent);
+            border-radius: 2px;
+            filter: blur(2px);
+        }
+
+        .speed-line-1 {
+            top: 20px;
+            right: -30px;
+            transform: rotate(15deg);
+            animation: speedLineMove 1s ease infinite;
+        }
+
+        .speed-line-2 {
+            bottom: 20px;
+            right: -20px;
+            transform: rotate(-5deg);
+            width: 40px;
+            animation: speedLineMove 1.2s ease infinite;
+            animation-delay: 0.3s;
+        }
+
+        .speed-line-3 {
+            top: 50%;
+            right: -40px;
+            transform: translateY(-50%) rotate(0deg);
+            width: 80px;
+            animation: speedLineMove 0.8s ease infinite;
+            animation-delay: 0.1s;
+        }
+
+        @keyframes fastSpin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        @keyframes speedLineMove {
+            0% { opacity: 0; transform: translateX(0) rotate(15deg); }
+            50% { opacity: 1; transform: translateX(-20px) rotate(15deg); }
+            100% { opacity: 0; transform: translateX(-40px) rotate(15deg); }
+        }
+
+        /* ===== POWERED BY ZLINK TECHNOLOGY - UPDATED ===== */
+        .powered-by-container {
+            text-align: center;
+            margin: 0.5rem 0 0.25rem;
+            position: relative;
+        }
+
+        .powered-by-text {
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.7);
+            display: inline-block;
+            position: relative;
+            padding: 0 10px;
+            font-weight: 400;
+        }
+
+        .powered-by-text::before,
+        .powered-by-text::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 20px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .powered-by-text::before { left: -15px; }
+        .powered-by-text::after { right: -15px; }
+
+        .zlink-highlight {
+            color: #e67e22 !important;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-shadow: 0 0 12px rgba(230,126,34,0.5);
+            background: rgba(230,126,34,0.15);
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-left: 4px;
+            display: inline-block;
+            animation: zlinkPulse 2s ease infinite;
+            font-family: 'Harlow Solid Italic', cursive;
+            font-style: italic;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes zlinkPulse {
+            0%,100% { opacity: 0.9; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.03); text-shadow: 0 0 18px rgba(230,126,34,0.7); }
+        }
+
+        /* ===== LOGIN SCREEN - FIXED CENTERING ===== */
+        #loginScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), #000);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 30px;
+            padding: 2rem;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            border: 2px solid var(--accent);
+            animation: slideUp 0.5s ease;
+            margin: auto;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .welcome-text {
+            text-align: center;
+            color: var(--dark);
+            margin: 1rem 0 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            font-size: 1rem;
+            background: #f8f9fa;
+        }
+
+        .login-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(230,126,34,0.1);
+        }
+
+        /* Remove browser autofill background */
+        .login-input:-webkit-autofill,
+        .login-input:-webkit-autofill:hover,
+        .login-input:-webkit-autofill:focus,
+        .login-input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 30px #f8f9fa inset !important;
+            -webkit-text-fill-color: #000 !important;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+            transition: all 0.3s;
+        }
+
+        .btn-primary { 
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
+            color: white; 
+        }
+        .btn-success { background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; }
+        .btn-danger { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; }
+        .btn-warning { background: linear-gradient(135deg, #f39c12, #e67e22); color: white; }
+        .btn-info { background: linear-gradient(135deg, #3498db, #2980b9); color: white; }
+
+        /* ===== CONNECTION INDICATOR - UPDATED ===== */
+        .connection-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0,0,0,0.3);
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+        }
+
+        .connection-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .connection-dot.connected {
+            background: var(--success);
+            box-shadow: 0 0 15px var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        .connection-dot.disconnected {
+            background: var(--danger);
+            box-shadow: 0 0 15px var(--danger);
+        }
+
+        @keyframes pulse {
+            0%,100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.1); }
+        }
+
+        /* Refresh button */
+        .refresh-btn {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-left: 5px;
+        }
+
+        .refresh-btn:hover {
+            background: var(--accent);
+            transform: rotate(180deg);
+        }
+
+        .refresh-btn i {
+            font-size: 1rem;
+        }
+
+        .driver-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0,0,0,0.3);
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            margin-left: auto;
+        }
+
+        .driver-info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .driver-details {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .driver-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #d35400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border: 2px solid white;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .driver-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .driver-avatar:hover .avatar-overlay {
+            opacity: 1;
+        }
+
+        .driver-text h3 { font-size: 1rem; }
+        .driver-text p { font-size: 0.7rem; opacity: 0.8; }
+
+        .header-icons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            font-size: 0.6rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--primary);
+        }
+
+        /* Message Center */
+        .message-center {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            margin: 0.5rem 0;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .message-header {
+            background: var(--accent);
+            padding: 0.6rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .message-header h4 {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .message-list {
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 0.5rem;
+            background: rgba(0,0,0,0.2);
+        }
+
+        .message-item {
+            margin: 0.5rem 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message-item.sent {
+            align-items: flex-end;
+        }
+
+        .message-item.received {
+            align-items: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 80%;
+            padding: 0.6rem 1rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            position: relative;
+            word-wrap: break-word;
+        }
+
+        .message-item.sent .message-bubble {
+            background: var(--message-sent);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message-item.received .message-bubble {
+            background: var(--message-received);
+            color: white;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message-time {
+            font-size: 0.6rem;
+            opacity: 0.7;
+            margin-top: 0.2rem;
+        }
+
+        .message-input-area {
+            display: flex;
+            padding: 0.5rem;
+            gap: 0.5rem;
+            background: rgba(0,0,0,0.3);
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .message-input-area input {
+            flex: 1;
+            padding: 0.6rem 1rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 0.85rem;
+        }
+
+        .message-input-area input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .message-input-area button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0,0,0,0.3);
+            border-radius: 30px;
+            padding: 0.3rem;
+            margin-top: 0.75rem;
+        }
+
+        .nav-tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.5rem 0;
+            border-radius: 25px;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-tab i {
+            display: block;
+            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .nav-tab.active {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(230,126,34,0.3);
+        }
+
+        /* Status Bar */
+        .status-bar {
+            background: rgba(0,0,0,0.3);
+            border-radius: 30px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .earnings {
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        /* Speed Indicator */
+        .speed-indicator {
+            position: fixed;
+            top: 80px;
+            right: 10px;
+            background: rgba(231, 76, 60, 0.2);
+            color: var(--danger);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            border: 2px solid var(--danger);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            cursor: pointer;
+        }
+
+        .speed-indicator:hover::after {
+            content: attr(data-speed);
+            position: absolute;
+            right: 45px;
+            background: var(--danger);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 0 1rem 1rem;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Dashboard Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 1rem 0.5rem;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-mini {
+            background: rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 0.75rem 0.25rem;
+            text-align: center;
+        }
+
+        .stat-mini-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--info);
+        }
+
+        .stat-mini-label {
+            font-size: 0.6rem;
+            opacity: 0.7;
+        }
+
+        /* Active Trip Card - ENHANCED VISIBLE BUTTONS */
+        .trip-card {
+            background: linear-gradient(135deg, var(--secondary), #000);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 2px solid var(--accent);
+        }
+
+        .trip-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+
+        .trip-stage {
+            background: var(--accent);
+            padding: 0.4rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .trip-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .trip-row i { width: 24px; color: var(--accent); font-size: 1.1rem; }
+
+        .trip-detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.95rem;
+        }
+
+        /* ENHANCED VISIBLE BUTTONS */
+        .trip-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .trip-actions .btn {
+            padding: 1rem 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border-radius: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .trip-actions .btn-warning {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+        }
+
+        .trip-actions .btn-success {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+        }
+
+        .trip-actions .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .trip-actions .btn-danger {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .trip-actions .btn:disabled {
+            opacity: 0.4;
+            filter: grayscale(80%);
+        }
+
+        .btn-danger.cancel-btn {
+            margin-top: 0.75rem;
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* Job Card */
+        .job-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 1.5rem 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--accent);
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .job-distance {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .job-details {
+            background: rgba(0,0,0,0.2);
+            border-radius: 15px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+        }
+
+        .job-detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.3rem 0;
+            font-size: 0.85rem;
+        }
+
+        .job-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        /* METER PAGE */
+        .fare-display {
+            background: linear-gradient(135deg, var(--secondary), #000);
+            border-radius: 30px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            border: 2px solid var(--accent);
+        }
+
+        .fare-amount {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--accent);
+            text-shadow: 0 0 10px rgba(230,126,34,0.3);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .fare-details {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 0.5rem;
+            background: rgba(0,0,0,0.3);
+            padding: 0.5rem;
+            border-radius: 30px;
+        }
+
+        .fare-detail-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .fare-detail-item i {
+            color: var(--accent);
+            margin-bottom: 0.2rem;
+            font-size: 0.9rem;
+        }
+
+        .fare-detail-item span {
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .fare-detail-item small {
+            font-size: 0.65rem;
+            opacity: 0.7;
+        }
+
+        .manual-fare-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .manual-fare-row input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .manual-fare-row input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .manual-fare-row button {
+            width: 60px;
+            height: 50px;
+            background: var(--accent);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .meter-controls {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .control-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .control-row:last-child { border-bottom: none; }
+
+        .control-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .control-label i {
+            color: var(--accent);
+            width: 20px;
+        }
+
+        .waiting-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0,0,0,0.3);
+            padding: 0.3rem;
+            border-radius: 30px;
+            border: 1px solid var(--accent);
+        }
+
+        .waiting-btn {
+            background: var(--info);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .waiting-btn.active {
+            background: var(--warning);
+            animation: pulse 1s infinite;
+        }
+
+        .waiting-time-display {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: rgba(0,0,0,0.5);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+        }
+
+        .waiting-time {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent);
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .passenger-control {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(0,0,0,0.3);
+            padding: 0.3rem;
+            border-radius: 30px;
+        }
+
+        .passenger-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .passenger-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .passenger-count {
+            font-size: 1.3rem;
+            font-weight: bold;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .meter-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .meter-buttons .btn {
+            padding: 0.8rem;
+            font-size: 0.8rem;
+        }
+
+        .fare-breakdown {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 1rem;
+        }
+
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .breakdown-row.total {
+            font-weight: bold;
+            color: var(--accent);
+            font-size: 1.2rem;
+            border-bottom: none;
+        }
+
+        /* PAYMENT SECTION */
+        .payment-section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 1rem;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        .payment-section.active {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        .payment-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .payment-header i {
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .payment-header h4 {
+            color: white;
+            font-size: 1rem;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .payment-method {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1rem 0.3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            opacity: 0.7;
+        }
+
+        .payment-method:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+
+        .payment-method i {
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+            display: block;
+            color: var(--gray);
+        }
+
+        .payment-method span {
+            font-size: 0.65rem;
+            display: block;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .payment-method .not-available {
+            font-size: 0.55rem;
+            color: var(--warning);
+            margin-top: 0.2rem;
+        }
+
+        .payment-note {
+            text-align: center;
+            color: var(--warning);
+            font-size: 0.75rem;
+            padding: 0.5rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            margin-top: 0.5rem;
+        }
+
+        .payment-note i {
+            margin-right: 0.3rem;
+        }
+
+        /* GPS Buttons */
+        .gps-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .gps-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 1rem 0.5rem;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .gps-btn i {
+            font-size: 2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .gps-btn.waze i { color: #33ccff; }
+        .gps-btn.apple i { color: #ffffff; }
+        .gps-btn.google i { color: #34a853; }
+
+        /* Safety Grid */
+        .safety-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .safety-btn {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 1.5rem 0.5rem;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .safety-btn i {
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .safety-btn.emergency i { color: var(--danger); }
+        .safety-btn.panic i { 
+            color: var(--danger); 
+            animation: panicPulse 1s infinite;
+        }
+
+        @keyframes panicPulse {
+            0%,100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Profile Page */
+        .profile-header {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+            border: 3px solid white;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-upload {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 0.2rem;
+            font-size: 0.65rem;
+            text-align: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .profile-avatar:hover .avatar-upload {
+            opacity: 1;
+        }
+
+        .profile-stats {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 1rem;
+        }
+
+        .profile-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .profile-row:last-child {
+            border-bottom: none;
+        }
+
+        /* JOB ALERT MODAL */
+        .job-alert {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .alert-content {
+            background: linear-gradient(135deg, var(--accent), #d35400);
+            border-radius: 30px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            border: 4px solid white;
+            animation: alertPulse 2s infinite;
+        }
+
+        @keyframes alertPulse {
+            0%,100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .bird-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: chirp 0.5s ease infinite;
+        }
+
+        @keyframes chirp {
+            0%,100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(5deg); }
+        }
+
+        .alert-timer {
+            font-size: 3rem;
+            font-weight: 900;
+            margin: 1rem 0;
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            padding: 0.5rem;
+            border: 2px solid white;
+            color: white;
+        }
+
+        /* Modals */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 30px;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 350px;
+            color: var(--dark);
+        }
+
+        .modal-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        /* Commercial Ad Banner */
+        .ad-banner {
+            background: linear-gradient(135deg, #f97316, #eab308);
+            border-radius: 30px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            animation: slideIn 0.5s ease;
+        }
+
+        .ad-banner i {
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .marquee {
+            overflow: hidden;
+            white-space: nowrap;
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        .marquee span {
+            display: inline-block;
+            animation: marquee 15s linear infinite;
+        }
+
+        @keyframes marquee {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-100%); }
+        }
+
+        /* Wake Lock Indicator */
+        .wake-lock-indicator {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.5);
+            color: var(--accent);
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            z-index: 1000;
+        }
+
+        /* Responsive */
+        @media (max-width: 380px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .trip-actions { grid-template-columns: repeat(2, 1fr); }
+            .meter-buttons { grid-template-columns: repeat(2, 1fr); }
+            .payment-methods { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hidden Audio Elements -->
+    <audio id="birdSound" preload="auto" style="display: none;">
+        <source src="https://www.soundjay.com/misc/sounds/bird-01.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="meterSound" preload="auto" style="display: none;">
+        <source src="https://www.soundjay.com/misc/sounds/beep-01a.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="waitingSound" preload="auto" style="display: none;">
+        <source src="https://www.soundjay.com/misc/sounds/timer-beep.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="notificationSound" preload="auto" style="display: none;">
+        <source src="https://www.soundjay.com/misc/sounds/bell-ringing-01.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="panicSound" preload="auto" style="display: none;">
+        <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="messageSound" preload="auto" style="display: none;">
+        <source src="https://www.soundjay.com/misc/sounds/notification-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen">
+        <div class="login-container">
+            <div class="movex-logo">
+                <div style="position: relative;">
+                    <span class="move-text">M
+                        <span class="o-container">
+                            O
+                            <div class="o-ring"></div>
+                        </span>
+                        VE
+                    </span>
+                    <div class="speed-swoosh"></div>
+                    <div class="speed-lines">
+                        <div class="speed-line speed-line-1"></div>
+                        <div class="speed-line speed-line-2"></div>
+                        <div class="speed-line speed-line-3"></div>
+                    </div>
+                </div>
+                <div style="position: relative;">
+                    <span class="x-letter">X</span>
+                </div>
+            </div>
+            
+            <div class="welcome-text">Welcome to MoveX Driver Pro</div>
+            
+            <div class="powered-by-container">
+                <span class="powered-by-text">powered by</span>
+                <span class="zlink-highlight">Zlink Technology</span>
+            </div>
+            
+            <div id="loginError" class="hidden" style="background: var(--danger); color: white; padding: 0.75rem; border-radius: 10px; margin-bottom: 1rem; text-align: center;">
+                Invalid credentials
+            </div>
+
+            <input type="text" id="driverName" class="login-input" placeholder="Driver Name" autocomplete="off" autocapitalize="none" spellcheck="false">
+            <input type="password" id="password" class="login-input" placeholder="Password" autocomplete="off">
+            
+            <button class="btn btn-primary" onclick="login()">
+                <i class="fas fa-sign-in-alt"></i> LOGIN
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="app" class="hidden">
+        <div id="wakeLockIndicator" class="wake-lock-indicator hidden">
+            <i class="fas fa-moon"></i>
+            <span>Screen Wake Lock Active</span>
+        </div>
+
+        <div class="header">
+            <div class="connection-bar">
+                <div class="connection-status">
+                    <div class="connection-dot" id="connectionDot"></div>
+                </div>
+                <div class="refresh-btn" onclick="refreshConnection()">
+                    <i class="fas fa-sync-alt"></i>
+                </div>
+                <div class="driver-badge">
+                    <i class="fas fa-user"></i>
+                    <span id="driverNameSmall">Driver</span>
+                </div>
+            </div>
+
+            <div class="driver-info-row">
+                <div class="driver-details">
+                    <div class="driver-avatar" id="driverAvatar" onclick="uploadProfilePic()">
+                        <span id="avatarText"></span>
+                        <div class="avatar-overlay">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                        <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+                    </div>
+                    <div class="driver-text">
+                        <h3 id="driverNameDisplay"></h3>
+                        <p><i class="fas fa-id-card"></i> <span id="driverId"></span></p>
+                    </div>
+                </div>
+                <div class="header-icons">
+                    <div class="icon-btn" onclick="toggleMessageCenter()">
+                        <i class="fas fa-comment-dots"></i>
+                        <span class="badge" id="messageBadge">0</span>
+                    </div>
+                    <div class="icon-btn" onclick="showNotifications()">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge" id="notificationBadge">0</span>
+                    </div>
+                    <div class="icon-btn" onclick="showConnectionModal()">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Message Center -->
+            <div id="messageCenter" class="message-center hidden">
+                <div class="message-header" onclick="toggleMessageList()">
+                    <h4><i class="fas fa-comments"></i> Dispatch Messages</h4>
+                    <i class="fas fa-chevron-down" id="messageChevron"></i>
+                </div>
+                <div id="messageList" class="message-list hidden"></div>
+                <div class="message-input-area">
+                    <input type="text" id="messageInput" placeholder="Type a message..." onkeypress="handleMessageKeyPress(event)">
+                    <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <div class="nav-tabs">
+                <div class="nav-tab active" onclick="switchPage('dashboard')">HOME</div>
+                <div class="nav-tab" onclick="switchPage('jobs')">JOBS</div>
+                <div class="nav-tab" onclick="switchPage('meter')">METER</div>
+                <div class="nav-tab" onclick="switchPage('map')">MAP</div>
+                <div class="nav-tab" onclick="switchPage('safety')">SAFETY</div>
+                <div class="nav-tab" onclick="switchPage('profile')">PROFILE</div>
+            </div>
+        </div>
+
+        <div class="status-bar">
+            <span><i class="fas fa-clock"></i> <span id="currentTime"></span></span>
+            <span class="earnings" id="earningsDisplay">$0.00</span>
+        </div>
+
+        <!-- Commercial Ad Banner -->
+        <div id="adBanner" class="ad-banner">
+            <i class="fas fa-ad"></i>
+            <div class="marquee"><span id="adText">Welcome to MoveX Dispatch</span></div>
+        </div>
+
+        <div class="main-content">
+            <!-- DASHBOARD PAGE -->
+            <div id="dashboardPage" class="page active">
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-value" id="todayTrips">0</div><div class="stat-label">TODAY</div></div>
+                    <div class="stat-card"><div class="stat-value" id="weeklyTrips">0</div><div class="stat-label">WEEK</div></div>
+                </div>
+                <div class="stats-row">
+                    <div class="stat-mini"><div class="stat-mini-value" id="driverRating">4.9</div><div class="stat-mini-label">RATING</div></div>
+                    <div class="stat-mini"><div class="stat-mini-value" id="acceptRate">98%</div><div class="stat-mini-label">ACCEPT</div></div>
+                    <div class="stat-mini"><div class="stat-mini-value" id="onlineTime">0h</div><div class="stat-mini-label">ONLINE</div></div>
+                </div>
+
+                <!-- Active Trip Card -->
+                <div id="activeTripCard" class="trip-card hidden">
+                    <div class="trip-header">
+                        <h3>ACTIVE TRIP</h3>
+                        <span class="trip-stage" id="tripStage">ACCEPTED</span>
+                    </div>
+                    <div class="trip-row"><i class="fas fa-user"></i> <span id="tripCustomer">-</span></div>
+                    <div class="trip-row"><i class="fas fa-phone"></i> <span id="tripCustomerPhone">-</span></div>
+                    <div class="trip-row"><i class="fas fa-map-marker-alt"></i> <span id="tripPickup">-</span></div>
+                    <div class="trip-row"><i class="fas fa-flag-checkered"></i> <span id="tripDestination">-</span></div>
+                    <div class="trip-row"><i class="fas fa-dollar-sign"></i> <span id="tripFare">$0.00</span></div>
+                    <div class="trip-actions">
+                        <button class="btn btn-warning" onclick="arriveAtPickup()" id="arriveBtn">ARRIVE</button>
+                        <button class="btn btn-success" onclick="boardPassenger()" id="boardBtn" disabled>BOARD</button>
+                        <button class="btn btn-primary" onclick="startTrip()" id="startBtn" disabled>START</button>
+                        <button class="btn btn-danger" onclick="completeTrip()" id="completeBtn" disabled>END</button>
+                    </div>
+                    <button class="btn btn-danger cancel-btn" onclick="requestCancelTrip()">REQUEST CANCEL</button>
+                </div>
+            </div>
+
+            <!-- JOBS PAGE -->
+            <div id="jobsPage" class="page"><h3>AVAILABLE JOBS</h3><div id="availableJobs"></div></div>
+
+            <!-- METER PAGE -->
+            <div id="meterPage" class="page">
+                <div class="fare-display">
+                    <div class="fare-amount" id="currentFare">$0.00</div>
+                    <div class="fare-details">
+                        <div><span id="tripTime">00:00</span><br><small>TIME</small></div>
+                        <div><span id="tripDistance">0.0</span><br><small>MI</small></div>
+                        <div><span id="waitingTimeDisplay">0</span><br><small>WAIT</small></div>
+                    </div>
+                </div>
+
+                <!-- Manual Fare Input -->
+                <div class="manual-fare-row">
+                    <input type="number" id="manualFareAmount" placeholder="Enter manual amount" step="0.01" min="0">
+                    <button onclick="setManualFare()"><i class="fas fa-check"></i></button>
+                </div>
+
+                <div class="meter-controls">
+                    <div class="control-row">
+                        <span>Fare Type</span>
+                        <select id="fareType">
+                            <option value="standard">Standard $5</option>
+                            <option value="airport">Airport $9</option>
+                            <option value="flat30">Flat $30</option>
+                            <option value="flat35">Flat $35</option>
+                        </select>
+                    </div>
+                    <div class="control-row">
+                        <span>Waiting Time</span>
+                        <div class="waiting-control">
+                            <button class="waiting-btn" onclick="toggleWaitingTime()" id="waitingBtn">START</button>
+                            <span id="waitingTimeValue">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="meter-buttons">
+                    <button class="btn btn-success" onclick="startMeter()" id="startMeterBtn">START</button>
+                    <button class="btn btn-warning" onclick="pauseMeter()" id="pauseMeterBtn" disabled>PAUSE</button>
+                    <button class="btn btn-danger" onclick="resetMeter()" id="resetMeterBtn">RESET</button>
+                </div>
+            </div>
+
+            <!-- MAP PAGE -->
+            <div id="mapPage" class="page">
+                <h3>GPS NAVIGATION</h3>
+                <div id="tripDestinationInfo" class="hidden">
+                    <p><i class="fas fa-map-marker-alt"></i> Pickup: <span id="navPickup"></span></p>
+                    <p><i class="fas fa-flag-checkered"></i> Dest: <span id="navDestination"></span></p>
+                </div>
+                <div class="gps-buttons">
+                    <button class="btn btn-info" onclick="openWaze()">WAZE</button>
+                    <button class="btn btn-info" onclick="openGoogleMaps()">GOOGLE</button>
+                    <button class="btn btn-info" onclick="openAppleMaps()">APPLE</button>
+                </div>
+            </div>
+
+            <!-- SAFETY PAGE -->
+            <div id="safetyPage" class="page">
+                <div class="safety-grid">
+                    <button class="safety-btn emergency" onclick="emergencyCall()"><i class="fas fa-phone-alt"></i><h4>EMERGENCY</h4></button>
+                    <button class="safety-btn" onclick="shareLocation()"><i class="fas fa-location-arrow"></i><h4>SHARE</h4></button>
+                    <button class="safety-btn panic" onclick="triggerPanic()"><i class="fas fa-exclamation-triangle"></i><h4>PANIC</h4></button>
+                    <button class="safety-btn" onclick="showSafetyTips()"><i class="fas fa-shield-alt"></i><h4>TIPS</h4></button>
+                </div>
+            </div>
+
+            <!-- PROFILE PAGE -->
+            <div id="profilePage" class="page">
+                <div class="profile-header">
+                    <div class="profile-avatar" id="profileAvatar" onclick="uploadProfilePic()"><span id="profileAvatarText"></span></div>
+                    <h3 id="profileName"></h3>
+                    <p id="profileId"></p>
+                </div>
+                <div class="profile-stats">
+                    <div class="profile-row"><span>Cab</span><span id="profileCab"></span></div>
+                    <div class="profile-row"><span>License</span><span id="profileLicense"></span></div>
+                    <div class="profile-row"><span>Phone</span><span id="profilePhone"></span></div>
+                    <div class="profile-row"><span>Rating</span><span id="profileRating">4.9 ★</span></div>
+                    <div class="profile-row"><span>Trips</span><span id="profileTrips">0</span></div>
+                    <div class="profile-row"><span>Earnings</span><span id="profileEarnings">$0.00</span></div>
+                </div>
+                <button class="btn btn-primary" onclick="logout()">LOGOUT</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JOB ALERT MODAL -->
+    <div id="jobAlert" class="job-alert hidden">
+        <div class="alert-content">
+            <div class="bird-icon"><i class="fas fa-dove"></i></div>
+            <h2>NEW JOB!</h2>
+            <div class="alert-distance" id="alertDistance">2.3</div>
+            <div class="alert-label">miles away</div>
+            <div class="alert-timer" id="alertTimer">30</div>
+            <button class="btn btn-success" onclick="acceptJob()">ACCEPT</button>
+            <button class="btn btn-danger" onclick="declineJob()">DECLINE</button>
+        </div>
+    </div>
+
+    <!-- CANCEL REQUEST MODAL -->
+    <div id="cancelRequestModal" class="modal hidden">
+        <div class="modal-content">
+            <h3>CANCEL REQUEST</h3>
+            <p>Your cancel request has been sent to dispatch. Please wait for approval.</p>
+            <button class="btn btn-primary" onclick="closeModal('cancelRequestModal')">OK</button>
+        </div>
+    </div>
+
+    <!-- CONNECTION MODAL -->
+    <div id="connectionModal" class="modal hidden">
+        <div class="modal-content">
+            <h3>Connection Status</h3>
+            <p id="connectionStatus">Connected</p>
+            <button class="btn btn-primary" onclick="reconnect()">RECONNECT</button>
+            <button class="btn btn-danger" onclick="closeModal('connectionModal')">CLOSE</button>
+        </div>
+    </div>
+
+    <!-- NOTIFICATIONS MODAL -->
+    <div id="notificationsModal" class="modal hidden">
+        <div class="modal-content">
+            <h3>Notifications</h3>
+            <div id="notificationsList"></div>
+            <button class="btn btn-primary" onclick="closeModal('notificationsModal')">CLOSE</button>
+        </div>
+    </div>
+
+    <!-- HISTORY MODAL -->
+    <div id="historyModal" class="modal hidden">
+        <div class="modal-content">
+            <h3>TRIP RECORDED</h3>
+            <p>Trip saved to MoveX Dispatch History</p>
+            <button class="btn btn-success" onclick="closeModal('historyModal')">OK</button>
+        </div>
+    </div>
+
+    <!-- PAYMENT NOT AVAILABLE MODAL -->
+    <div id="paymentNotAvailableModal" class="modal hidden">
+        <div class="modal-content">
+            <i class="fas fa-credit-card" style="font-size: 3rem; color: var(--warning); margin-bottom: 1rem; text-align: center; display: block;"></i>
+            <h3 style="text-align: center; color: var(--warning);">Payment Not Available</h3>
+            <p style="text-align: center; margin: 1rem 0;">Payment processing is currently under development. Please check back later.</p>
+            <button class="btn btn-primary" onclick="closeModal('paymentNotAvailableModal')">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // =============================================
+        // MOVE X DRIVER APP - COMPLETE WITH ALL FIXES
+        // =============================================
+
+        // Global variables
+        let socket;
+        let currentUser = null;
+        let activeTrip = null;
+        let meterInterval = null;
+        let waitingInterval = null;
+        let meterRunning = false;
+        let waitingActive = false;
+        let waitingTime = 0;
+        let meterTime = 0;
+        let meterDistance = 0;
+        let extraPassengers = 0;
+        let currentJobAlert = null;
+        let notificationCount = 0;
+        let messageCount = 0;
+        let messages = [];
+        let tripHistory = [];
+        let speedAlertEnabled = true;
+        let dispatchConnected = false;
+        let lastLocation = null;
+        let lastAddress = '';
+        let reconnectAttempts = 0;
+        let wakeLock = null;
+        let manualFareOverride = null;
+        let audioContext = null;
+        let autoPriceCalculation = true;
+        let jobTimer = null;
+        const MAX_RECONNECT_ATTEMPTS = 5;
+
+        // Audio elements
+        let birdAudio;
+        let meterAudio;
+        let waitingAudio;
+        let notificationAudio;
+        let panicAudio;
+        let messageAudio;
+
+        // Permanent storage
+        let activeTrips = [];
+        let completedTrips = [];
+
+        // Fare rates
+        const FARE_RATES = {
+            perMile: 2.50,
+            passengerCharge: 2.00,
+            waitingCharge: 0.35,
+            standardBase: 5.00,
+            airportBase: 9.00,
+            flat30: 30.00,
+            flat35: 35.00
+        };
+
+        // Drivers database
+        const MOVE_DRIVERS = {
+            'ziad': { name: 'Ziad Ahmed', id: 'Z8888', cabNumber: 8888, license: 'DL1014', phone: '615-525-8619', email: 'zethio2000@gmail.com', address: '5112 Kensal Dr' },
+            'solomon': { name: 'Solomon Tadele', id: 'DRV044', cabNumber: 44, license: 'DL2229', phone: '615-497-3417', email: 'Gezai6701@gmail.com', address: '6701 Birchbrook Dr' },
+            'dessalegn': { name: 'Dessalegn Tolera', id: 'DRV070', cabNumber: 70, license: 'DL6644', phone: '615-525-7382', email: 'desalegni16@yahoo.com', address: '704 Winchester Pl' },
+            'dawit': { name: 'Dawit Mendesel', id: 'DRV071', cabNumber: 71, license: 'DL9478', phone: '615-499-2453', email: 'dawitmend@yahoo.com', address: '504 Gammon Lane' },
+            'abraham': { name: 'Abraham Solomon', id: 'DRV152', cabNumber: 152, license: 'DL3715', phone: '629-254-6858', email: 'Zgalsolomon@gmail.com', address: '7031 Alon Barayan Arch' }
+        };
+
+        // =============================================
+        // REVERSE GEOCODING
+        // =============================================
+        async function getAddressFromCoords(lat, lng) {
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`);
+                const data = await response.json();
+                if (data && data.display_name) {
+                    return data.display_name.substring(0, 100);
+                }
+                return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+            } catch (error) {
+                console.log('Geocoding error:', error);
+                return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+            }
+        }
+
+        // =============================================
+        // PERMANENT STORAGE
+        // =============================================
+        function loadPersistentData() {
+            const savedActiveTrips = localStorage.getItem('movex_active_trips');
+            const savedCompletedTrips = localStorage.getItem('movex_completed_trips');
+            
+            if (savedActiveTrips) {
+                activeTrips = JSON.parse(savedActiveTrips);
+                const now = new Date();
+                activeTrips = activeTrips.filter(trip => {
+                    const tripDate = new Date(trip.timestamp);
+                    const hoursDiff = (now - tripDate) / (1000 * 60 * 60);
+                    if (hoursDiff >= 24) {
+                        if (trip.status === 'completed') {
+                            completedTrips.unshift(trip);
+                        }
+                        return false;
+                    }
+                    return true;
+                });
+                saveActiveTrips();
+                saveCompletedTrips();
+            }
+            
+            if (savedCompletedTrips) {
+                completedTrips = JSON.parse(savedCompletedTrips);
+                if (completedTrips.length > 500) {
+                    completedTrips = completedTrips.slice(0, 500);
+                    saveCompletedTrips();
+                }
+            }
+        }
+
+        function saveActiveTrips() {
+            localStorage.setItem('movex_active_trips', JSON.stringify(activeTrips));
+        }
+
+        function saveCompletedTrips() {
+            localStorage.setItem('movex_completed_trips', JSON.stringify(completedTrips));
+        }
+
+        function addToActiveTrips(trip) {
+            trip.timestamp = new Date().toISOString();
+            trip.status = 'active';
+            activeTrips.unshift(trip);
+            saveActiveTrips();
+        }
+
+        function moveToCompletedTrips(tripId) {
+            const tripIndex = activeTrips.findIndex(t => t.id === tripId);
+            if (tripIndex !== -1) {
+                const trip = activeTrips[tripIndex];
+                trip.status = 'completed';
+                trip.completedAt = new Date().toISOString();
+                completedTrips.unshift(trip);
+                activeTrips.splice(tripIndex, 1);
+                saveActiveTrips();
+                saveCompletedTrips();
+            }
+        }
+
+        // =============================================
+        // AUDIO FUNCTIONS
+        // =============================================
+        function initAudio() {
+            try {
+                window.AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (window.AudioContext) {
+                    audioContext = new AudioContext();
+                    const resumeAudio = function() {
+                        if (audioContext && audioContext.state === 'suspended') {
+                            audioContext.resume();
+                        }
+                    };
+                    document.addEventListener('touchstart', resumeAudio);
+                    document.addEventListener('click', resumeAudio);
+                    setInterval(resumeAudio, 10000);
+                }
+            } catch (e) {}
+        }
+
+        function playBirdSound() {
+            if (!birdAudio) return;
+            
+            birdAudio.currentTime = 0;
+            birdAudio.volume = 1.0;
+            
+            let attempts = 0;
+            const maxAttempts = 3;
+            
+            function attemptPlay() {
+                birdAudio.play().then(() => {
+                    console.log('Bird sound played');
+                    if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+                }).catch(error => {
+                    attempts++;
+                    if (attempts < maxAttempts) {
+                        setTimeout(attemptPlay, 200);
+                    } else {
+                        if (navigator.vibrate) navigator.vibrate([500, 200, 500]);
+                        if (Notification.permission === 'granted') {
+                            new Notification('New Job Available!', { body: 'A new trip is waiting', vibrate: [200, 100, 200] });
+                        }
+                    }
+                });
+            }
+            attemptPlay();
+        }
+
+        function playMeterSound() {
+            if (meterAudio) {
+                meterAudio.currentTime = 0;
+                meterAudio.play().catch(() => {});
+            }
+        }
+
+        function playWaitingSound() {
+            if (waitingAudio) {
+                waitingAudio.currentTime = 0;
+                waitingAudio.play().catch(() => {});
+            }
+        }
+
+        // =============================================
+        // WAKE LOCK
+        // =============================================
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    document.getElementById('wakeLockIndicator').classList.remove('hidden');
+                    wakeLock.addEventListener('release', () => {
+                        document.getElementById('wakeLockIndicator').classList.add('hidden');
+                    });
+                }
+            } catch (err) {}
+        }
+
+        // =============================================
+        // LOCATION TRACKING with address
+        // =============================================
+        function startLocationTracking() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    async function(position) {
+                        lastLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
+                        lastAddress = await getAddressFromCoords(lastLocation.lat, lastLocation.lng);
+                        console.log('Current location:', lastAddress);
+                        startWatchingPosition();
+                    },
+                    function(error) {
+                        console.log('Location error:', error);
+                        lastLocation = { lat: 36.0546, lng: -86.6714 };
+                        lastAddress = 'Antioch, TN (Default)';
+                    },
+                    { enableHighAccuracy: true }
+                );
+            }
+        }
+
+        function startWatchingPosition() {
+            navigator.geolocation.watchPosition(
+                async function(position) {
+                    const newLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
+                    
+                    if (!lastLocation || 
+                        Math.abs(newLocation.lat - lastLocation.lat) > 0.001 || 
+                        Math.abs(newLocation.lng - lastLocation.lng) > 0.001) {
+                        
+                        lastAddress = await getAddressFromCoords(newLocation.lat, newLocation.lng);
+                        lastLocation = newLocation;
+                        
+                        if (socket?.connected && currentUser) {
+                            socket.emit('location_share', {
+                                driverId: currentUser.id,
+                                lat: lastLocation.lat,
+                                lng: lastLocation.lng,
+                                address: lastAddress
+                            });
+                        }
+                    }
+                },
+                null,
+                { enableHighAccuracy: true, maximumAge: 5000 }
+            );
+        }
+
+        // =============================================
+        // DISPATCH CONNECTION
+        // =============================================
+        function connectToDispatch() {
+            const dispatchUrl = 'https://movex-server-8fkl.onrender.com';
+            
+            if (socket) socket.disconnect();
+            
+            socket = io(dispatchUrl, {
+                reconnection: true,
+                reconnectionAttempts: 20,
+                transports: ['websocket', 'polling']
+            });
+
+            socket.on('connect', () => {
+                dispatchConnected = true;
+                updateConnectionStatus(true);
+                if (currentUser) {
+                    socket.emit('driver_online', {
+                        driverId: currentUser.id,
+                        name: currentUser.name,
+                        cabNumber: currentUser.cabNumber,
+                        location: { ...lastLocation, address: lastAddress }
+                    });
+                }
+            });
+
+            socket.on('disconnect', () => {
+                dispatchConnected = false;
+                updateConnectionStatus(false);
+            });
+
+            socket.on('new_job', (jobData) => {
+                console.log('📦 NEW JOB:', jobData);
+                if (!activeTrip) {
+                    if (jobTimer) clearTimeout(jobTimer);
+                    
+                    currentJobAlert = {
+                        id: jobData.id,
+                        customer: jobData.customer,
+                        phone: jobData.phone || 'N/A',
+                        pickup: jobData.pickup,
+                        destination: jobData.destination,
+                        distance: jobData.distance || '2.5',
+                        fare: jobData.fare || 0
+                    };
+                    
+                    showJobAlert(currentJobAlert.distance);
+                    playBirdSound();
+                    
+                    jobTimer = setTimeout(() => {
+                        if (currentJobAlert) {
+                            declineJob();
+                            addNotification('Job offer expired');
+                        }
+                    }, 30000);
+                }
+            });
+
+            socket.on('redispatch', (jobData) => {
+                console.log('🔄 REDISPATCH received:', jobData);
+                if (!activeTrip) {
+                    currentJobAlert = {
+                        id: jobData.id,
+                        customer: jobData.customer,
+                        phone: jobData.phone || 'N/A',
+                        pickup: jobData.pickup,
+                        destination: jobData.destination,
+                        distance: jobData.distance || '2.5',
+                        fare: jobData.fare || 0
+                    };
+                    showJobAlert(currentJobAlert.distance);
+                    playBirdSound();
+                }
+            });
+
+            socket.on('cancel_approved', (data) => {
+                if (activeTrip && activeTrip.id === data.tripId) {
+                    alert('Trip cancellation approved by dispatch');
+                    cancelTrip();
+                    addNotification('Trip cancelled by dispatch approval');
+                }
+            });
+
+            socket.on('cancel_rejected', (data) => {
+                if (activeTrip && activeTrip.id === data.tripId) {
+                    alert('Trip cancellation rejected by dispatch. Please complete the trip.');
+                    activeTrip.cancelRequested = false;
+                }
+            });
+
+            socket.on('auto_price_setting', (data) => {
+                autoPriceCalculation = data.enabled;
+                addNotification(`Auto price calculation ${autoPriceCalculation ? 'enabled' : 'disabled'}`);
+                updateFare();
+            });
+
+            socket.on('commercial_ad', (ad) => {
+                console.log('Commercial ad:', ad);
+                document.getElementById('adText').textContent = ad.text || 'Special offer from MoveX!';
+                document.getElementById('adBanner').classList.remove('hidden');
+                setTimeout(() => {
+                    document.getElementById('adBanner').classList.add('hidden');
+                }, (ad.duration || 30) * 1000);
+            });
+
+            socket.on('dispatch_message', (data) => {
+                addMessage({ text: data.text, sender: 'dispatch', timestamp: new Date().toISOString() });
+                if (data.important) playBirdSound();
+            });
+
+            socket.on('panic_acknowledged', () => {
+                addNotification('🚨 Dispatch received panic alert!');
+                if (panicAudio) panicAudio.pause();
+            });
+        }
+
+        function updateConnectionStatus(connected) {
+            const dot = document.getElementById('connectionDot');
+            dot.className = connected ? 'connection-dot connected' : 'connection-dot disconnected';
+        }
+
+        // =============================================
+        // JOB HANDLING
+        // =============================================
+        function showJobAlert(distance) {
+            document.getElementById('alertDistance').textContent = distance;
+            document.getElementById('jobAlert').classList.remove('hidden');
+            
+            let timeLeft = 30;
+            const timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('alertTimer').textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    document.getElementById('jobAlert').classList.add('hidden');
+                }
+            }, 1000);
+        }
+
+        function acceptJob() {
+            if (!currentJobAlert) return;
+            
+            clearTimeout(jobTimer);
+            document.getElementById('jobAlert').classList.add('hidden');
+            
+            activeTrip = {
+                id: currentJobAlert.id,
+                customer: currentJobAlert.customer,
+                phone: currentJobAlert.phone,
+                pickup: currentJobAlert.pickup,
+                destination: currentJobAlert.destination,
+                fare: currentJobAlert.fare,
+                stage: 'accepted',
+                cancelRequested: false,
+                timestamp: new Date().toISOString()
+            };
+            
+            addToActiveTrips(activeTrip);
+            
+            showActiveTrip();
+            addNotification('Job accepted');
+            switchPage('map');
+            
+            document.getElementById('navPickup').textContent = activeTrip.pickup;
+            document.getElementById('navDestination').textContent = activeTrip.destination;
+            document.getElementById('tripCustomerPhone').textContent = activeTrip.phone;
+            
+            if (socket?.connected) {
+                socket.emit('job_accepted', {
+                    jobId: currentJobAlert.id,
+                    driverId: currentUser.id,
+                    driverName: currentUser.name,
+                    location: { ...lastLocation, address: lastAddress }
+                });
+            }
+            
+            currentJobAlert = null;
+        }
+
+        function declineJob() {
+            clearTimeout(jobTimer);
+            document.getElementById('jobAlert').classList.add('hidden');
+            if (socket?.connected && currentJobAlert) {
+                socket.emit('job_declined', {
+                    jobId: currentJobAlert.id,
+                    driverId: currentUser.id,
+                    driverName: currentUser.name
+                });
+            }
+            currentJobAlert = null;
+        }
+
+        function showActiveTrip() {
+            document.getElementById('activeTripCard').classList.remove('hidden');
+            document.getElementById('tripCustomer').textContent = activeTrip.customer;
+            document.getElementById('tripCustomerPhone').textContent = activeTrip.phone;
+            document.getElementById('tripPickup').textContent = activeTrip.pickup;
+            document.getElementById('tripDestination').textContent = activeTrip.destination;
+            document.getElementById('tripFare').textContent = `$${activeTrip.fare.toFixed(2)}`;
+            document.getElementById('tripStage').textContent = 'ACCEPTED';
+        }
+
+        // =============================================
+        // TRIP STAGE FUNCTIONS
+        // =============================================
+        function arriveAtPickup() {
+            if (!activeTrip) return;
+            activeTrip.stage = 'arrived';
+            document.getElementById('tripStage').textContent = 'ARRIVED';
+            document.getElementById('arriveBtn').disabled = true;
+            document.getElementById('boardBtn').disabled = false;
+            socket?.emit('trip_update', { tripId: activeTrip.id, stage: 'arrived' });
+        }
+
+        function boardPassenger() {
+            if (!activeTrip) return;
+            activeTrip.stage = 'boarded';
+            document.getElementById('tripStage').textContent = 'BOARDED';
+            document.getElementById('boardBtn').disabled = true;
+            document.getElementById('startBtn').disabled = false;
+            socket?.emit('trip_update', { tripId: activeTrip.id, stage: 'boarded' });
+        }
+
+        function startTrip() {
+            if (!activeTrip) return;
+            activeTrip.stage = 'started';
+            document.getElementById('tripStage').textContent = 'STARTED';
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('completeBtn').disabled = false;
+            startMeter();
+            socket?.emit('trip_update', { tripId: activeTrip.id, stage: 'started' });
+        }
+
+        function completeTrip() {
+            if (!activeTrip) return;
+            
+            const fare = parseFloat(document.getElementById('currentFare').textContent.replace('$', ''));
+            
+            currentUser.earnings += fare;
+            currentUser.trips++;
+            
+            localStorage.setItem('movexDriver', JSON.stringify(currentUser));
+            localStorage.setItem('movexTrips_' + currentUser.id, currentUser.trips);
+            localStorage.setItem('movexEarnings_' + currentUser.id, currentUser.earnings);
+            
+            moveToCompletedTrips(activeTrip.id);
+            
+            socket?.emit('trip_complete', {
+                tripId: activeTrip.id,
+                driverId: currentUser.id,
+                fare: fare,
+                distance: meterDistance
+            });
+            
+            alert(`Trip completed! Earned $${fare.toFixed(2)}`);
+            updateUserInfo();
+            document.getElementById('activeTripCard').classList.add('hidden');
+            resetMeter();
+            activeTrip = null;
+        }
+
+        function requestCancelTrip() {
+            if (!activeTrip || activeTrip.cancelRequested) return;
+            
+            if (confirm('Request cancellation from dispatch?')) {
+                activeTrip.cancelRequested = true;
+                
+                socket.emit('cancel_request', {
+                    tripId: activeTrip.id,
+                    driverId: currentUser.id,
+                    driverName: currentUser.name,
+                    location: { ...lastLocation, address: lastAddress }
+                }, (ack) => {
+                    if (ack && ack.received) {
+                        document.getElementById('cancelRequestModal').classList.remove('hidden');
+                        addNotification('Cancel request sent to dispatch');
+                    } else {
+                        alert('Failed to send cancel request - please try again');
+                        activeTrip.cancelRequested = false;
+                    }
+                });
+            }
+        }
+
+        function cancelTrip() {
+            document.getElementById('activeTripCard').classList.add('hidden');
+            resetMeter();
+            if (activeTrip) {
+                moveToCompletedTrips(activeTrip.id);
+                activeTrip = null;
+            }
+        }
+
+        // =============================================
+        // METER FUNCTIONS
+        // =============================================
+        function startMeter() {
+            if (meterRunning) return;
+            meterRunning = true;
+            meterInterval = setInterval(updateMeter, 1000);
+            document.getElementById('startMeterBtn').disabled = true;
+            document.getElementById('pauseMeterBtn').disabled = false;
+            playMeterSound();
+        }
+
+        function pauseMeter() {
+            meterRunning = false;
+            clearInterval(meterInterval);
+            document.getElementById('startMeterBtn').disabled = false;
+            document.getElementById('pauseMeterBtn').disabled = true;
+        }
+
+        function resetMeter() {
+            pauseMeter();
+            meterTime = 0;
+            meterDistance = 0;
+            waitingTime = 0;
+            extraPassengers = 0;
+            manualFareOverride = null;
+            
+            document.getElementById('tripTime').textContent = '00:00';
+            document.getElementById('tripDistance').textContent = '0.0';
+            document.getElementById('waitingTimeDisplay').textContent = '0';
+            document.getElementById('waitingTimeValue').textContent = '0';
+            document.getElementById('waitingBtn').innerHTML = 'START';
+            document.getElementById('waitingBtn').classList.remove('active');
+            document.getElementById('extraPassengers').textContent = '0';
+            document.getElementById('passengerMinus').disabled = true;
+            document.getElementById('passengerPlus').disabled = false;
+            
+            if (waitingActive) stopWaitingTime();
+            updateFare();
+        }
+
+        function updateMeter() {
+            meterTime++;
+            const minutes = Math.floor(meterTime / 60);
+            const seconds = meterTime % 60;
+            document.getElementById('tripTime').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (meterTime % 60 === 0 && activeTrip) {
+                meterDistance += 1.0;
+                document.getElementById('tripDistance').textContent = meterDistance.toFixed(1);
+            }
+            
+            updateFare();
+        }
+
+        function toggleWaitingTime() {
+            waitingActive ? stopWaitingTime() : startWaitingTime();
+        }
+
+        function startWaitingTime() {
+            if (waitingActive) return;
+            waitingActive = true;
+            
+            waitingInterval = setInterval(() => {
+                waitingTime++;
+                document.getElementById('waitingTimeDisplay').textContent = waitingTime;
+                document.getElementById('waitingTimeValue').textContent = waitingTime;
+                updateFare();
+                playWaitingSound();
+            }, 60000);
+            
+            document.getElementById('waitingBtn').innerHTML = 'STOP';
+            document.getElementById('waitingBtn').classList.add('active');
+        }
+
+        function stopWaitingTime() {
+            waitingActive = false;
+            clearInterval(waitingInterval);
+            document.getElementById('waitingBtn').innerHTML = 'START';
+            document.getElementById('waitingBtn').classList.remove('active');
+        }
+
+        function changePassengers(change) {
+            let newCount = extraPassengers + change;
+            if (newCount >= 0 && newCount <= 6) {
+                extraPassengers = newCount;
+                document.getElementById('extraPassengers').textContent = extraPassengers;
+                document.getElementById('passengerMinus').disabled = extraPassengers === 0;
+                document.getElementById('passengerPlus').disabled = extraPassengers === 6;
+                updateFare();
+            }
+        }
+
+        function setManualFare() {
+            const amount = parseFloat(document.getElementById('manualFareAmount').value);
+            if (!isNaN(amount) && amount >= 0) {
+                manualFareOverride = amount;
+                updateFare();
+                addNotification(`Manual fare set to $${amount.toFixed(2)}`);
+                document.getElementById('manualFareAmount').value = '';
+            }
+        }
+
+        function updateFare() {
+            if (manualFareOverride !== null) {
+                document.getElementById('currentFare').textContent = `$${manualFareOverride.toFixed(2)}`;
+                if (activeTrip) {
+                    document.getElementById('tripFare').textContent = `$${manualFareOverride.toFixed(2)}`;
+                }
+                return;
+            }
+
+            if (autoPriceCalculation && (!activeTrip || activeTrip.autoPrice !== false)) {
+                const fareType = document.getElementById('fareType').value;
+                let baseFare = fareType === 'standard' ? FARE_RATES.standardBase :
+                              fareType === 'airport' ? FARE_RATES.airportBase :
+                              fareType === 'flat30' ? FARE_RATES.flat30 :
+                              fareType === 'flat35' ? FARE_RATES.flat35 : 0;
+                
+                const distanceCharge = meterDistance * FARE_RATES.perMile;
+                const waitingCharge = waitingTime * FARE_RATES.waitingCharge;
+                const passengerCharge = extraPassengers * FARE_RATES.passengerCharge;
+                const total = baseFare + distanceCharge + waitingCharge + passengerCharge;
+                
+                document.getElementById('currentFare').textContent = `$${total.toFixed(2)}`;
+                if (activeTrip) {
+                    document.getElementById('tripFare').textContent = `$${total.toFixed(2)}`;
+                }
+            }
+        }
+
+        // =============================================
+        // LOGIN FUNCTIONS
+        // =============================================
+        function login() {
+            const name = document.getElementById('driverName').value.trim().toLowerCase();
+            const password = document.getElementById('password').value.trim();
+
+            const driver = MOVE_DRIVERS[name];
+            const isValid = driver && password === driver.license.slice(-4);
+
+            if (isValid) {
+                currentUser = {
+                    id: driver.id,
+                    name: driver.name,
+                    cabNumber: driver.cabNumber,
+                    license: driver.license,
+                    phone: driver.phone,
+                    email: driver.email,
+                    trips: parseInt(localStorage.getItem('movexTrips_' + driver.id)) || 0,
+                    earnings: parseFloat(localStorage.getItem('movexEarnings_' + driver.id)) || 0
+                };
+                
+                localStorage.setItem('movexDriver', JSON.stringify(currentUser));
+                loadPersistentData();
+                showApp();
+                addNotification(`Welcome ${currentUser.name}!`);
+                
+                const savedAvatar = localStorage.getItem('movexAvatar');
+                if (savedAvatar) {
+                    document.getElementById('driverAvatar').innerHTML = `<img src="${savedAvatar}" alt="Profile">`;
+                    document.getElementById('profileAvatar').innerHTML = `<img src="${savedAvatar}" alt="Profile">`;
+                }
+                
+                if (socket && socket.connected) {
+                    socket.emit('driver_online', {
+                        driverId: currentUser.id,
+                        name: currentUser.name,
+                        cabNumber: currentUser.cabNumber,
+                        location: { ...lastLocation, address: lastAddress }
+                    });
+                }
+            } else {
+                document.getElementById('loginError').classList.remove('hidden');
+            }
+        }
+
+        function checkSavedSession() {
+            const saved = localStorage.getItem('movexDriver');
+            if (saved) {
+                try {
+                    currentUser = JSON.parse(saved);
+                    loadPersistentData();
+                    showApp();
+                } catch (e) {}
+            }
+        }
+
+        function showApp() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('app').classList.remove('hidden');
+            updateUserInfo();
+        }
+
+        function updateUserInfo() {
+            if (!currentUser) return;
+            
+            const initials = currentUser.name.split(' ').map(n => n[0]).join('').substring(0, 2);
+            document.getElementById('avatarText').textContent = initials;
+            document.getElementById('profileAvatarText').textContent = initials;
+            document.getElementById('driverNameDisplay').textContent = currentUser.name;
+            document.getElementById('driverNameSmall').textContent = currentUser.name.split(' ')[0];
+            document.getElementById('profileName').textContent = currentUser.name;
+            document.getElementById('driverId').textContent = currentUser.id;
+            document.getElementById('profileId').textContent = currentUser.id;
+            document.getElementById('profileCab').textContent = currentUser.cabNumber;
+            document.getElementById('profileLicense').textContent = '****' + currentUser.license.slice(-4);
+            document.getElementById('profilePhone').textContent = currentUser.phone;
+            document.getElementById('profileEmail').textContent = currentUser.email;
+            document.getElementById('todayTrips').textContent = currentUser.trips || 0;
+            document.getElementById('profileTrips').textContent = currentUser.trips || 0;
+            document.getElementById('earningsDisplay').textContent = `$${(currentUser.earnings || 0).toFixed(2)}`;
+            document.getElementById('profileEarnings').textContent = `$${(currentUser.earnings || 0).toFixed(2)}`;
+        }
+
+        // =============================================
+        // MESSAGE FUNCTIONS
+        // =============================================
+        function toggleMessageCenter() {
+            const center = document.getElementById('messageCenter');
+            center.classList.toggle('hidden');
+        }
+
+        function toggleMessageList() {
+            const list = document.getElementById('messageList');
+            const chevron = document.getElementById('messageChevron');
+            list.classList.toggle('hidden');
+            chevron.classList.toggle('fa-chevron-down');
+            chevron.classList.toggle('fa-chevron-up');
+        }
+
+        function handleMessageKeyPress(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            
+            if (!text || !socket || !socket.connected || !currentUser) return;
+            
+            const message = {
+                id: 'msg_' + Date.now(),
+                text: text,
+                sender: 'driver',
+                timestamp: new Date().toISOString(),
+                driverId: currentUser.id,
+                driverName: currentUser.name
+            };
+            
+            addMessage(message);
+            socket.emit('driver_message', {
+                text: text,
+                driverId: currentUser.id,
+                driverName: currentUser.name,
+                cabNumber: currentUser.cabNumber
+            });
+            
+            input.value = '';
+        }
+
+        function addMessage(message) {
+            messages.push(message);
+            
+            const list = document.getElementById('messageList');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message-item ${message.sender === 'driver' ? 'sent' : 'received'}`;
+            const time = new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            msgDiv.innerHTML = `<div class="message-bubble">${message.text}</div><div class="message-time">${time}</div>`;
+            list.appendChild(msgDiv);
+            list.scrollTop = list.scrollHeight;
+            
+            if (message.sender !== 'driver') {
+                messageCount++;
+                document.getElementById('messageBadge').textContent = messageCount;
+                if (messageAudio) messageAudio.play().catch(() => {});
+            }
+        }
+
+        // =============================================
+        // SAFETY FUNCTIONS
+        // =============================================
+        function emergencyCall() {
+            if (confirm('Call 911?')) window.location.href = 'tel:911';
+        }
+
+        function shareLocation() {
+            if (lastLocation && socket?.connected) {
+                socket.emit('location_share', {
+                    driverId: currentUser.id,
+                    lat: lastLocation.lat,
+                    lng: lastLocation.lng,
+                    address: lastAddress
+                });
+                alert(`📍 Location shared!\n\n${lastAddress}`);
+            }
+        }
+
+        function triggerPanic() {
+            if (confirm('SEND PANIC ALERT?')) {
+                socket.emit('panic_alert', {
+                    driverId: currentUser.id,
+                    driverName: currentUser.name,
+                    cabNumber: currentUser.cabNumber,
+                    location: { ...lastLocation, address: lastAddress }
+                });
+                if (panicAudio) panicAudio.play();
+                addNotification('🚨 PANIC ALERT SENT');
+            }
+        }
+
+        function showSafetyTips() {
+            alert('SAFETY TIPS:\n\n• Verify passenger identity\n• Keep doors locked\n• Share location\n• Trust your instincts');
+        }
+
+        // =============================================
+        // GPS NAVIGATION
+        // =============================================
+        function openWaze() {
+            if (activeTrip) window.open(`https://waze.com/ul?q=${encodeURIComponent(activeTrip.destination)}`, '_system');
+        }
+        function openGoogleMaps() {
+            if (activeTrip) window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(activeTrip.destination)}`, '_system');
+        }
+        function openAppleMaps() {
+            if (activeTrip) window.open(`https://maps.apple.com/?daddr=${encodeURIComponent(activeTrip.destination)}`, '_system');
+        }
+
+        // =============================================
+        // UTILITY FUNCTIONS
+        // =============================================
+        function updateTime() {
+            document.getElementById('currentTime').textContent = new Date().toLocaleTimeString();
+        }
+
+        function checkSpeed() {
+            if (!activeTrip) {
+                document.getElementById('speedIndicator').style.display = 'none';
+                return;
+            }
+            
+            let speed = Math.floor(Math.random() * 70) + 30;
+            
+            if (speed > 55 && speedAlertEnabled) {
+                document.getElementById('speedIndicator').style.display = 'flex';
+                document.getElementById('speedIndicator').setAttribute('data-speed', `${speed} mph`);
+            } else {
+                document.getElementById('speedIndicator').style.display = 'none';
+            }
+        }
+
+        function toggleSpeedAlert() {
+            speedAlertEnabled = !speedAlertEnabled;
+            if (!speedAlertEnabled) {
+                document.getElementById('speedIndicator').style.display = 'none';
+            }
+        }
+
+        function addNotification(message) {
+            notificationCount++;
+            document.getElementById('notificationBadge').textContent = notificationCount;
+            const list = document.getElementById('notificationsList');
+            const div = document.createElement('div');
+            div.style.padding = '0.5rem';
+            div.style.borderBottom = '1px solid #ddd';
+            div.innerHTML = `${message}<br><small>${new Date().toLocaleTimeString()}</small>`;
+            list.insertBefore(div, list.firstChild);
+        }
+
+        function showNotifications() {
+            document.getElementById('notificationsModal').classList.remove('hidden');
+        }
+
+        function showConnectionModal() {
+            document.getElementById('connectionModal').classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function switchPage(page) {
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelector(`[onclick="switchPage('${page}')"]`).classList.add('active');
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(`${page}Page`).classList.add('active');
+        }
+
+        function refreshConnection() {
+            connectToDispatch();
+            addNotification('Refreshing connection...');
+        }
+
+        function reconnect() {
+            connectToDispatch();
+            closeModal('connectionModal');
+        }
+
+        function uploadProfilePic() {
+            const input = document.getElementById('avatarUpload');
+            input.click();
+            
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const imgData = event.target.result;
+                        document.getElementById('driverAvatar').innerHTML = `<img src="${imgData}" alt="Profile">`;
+                        document.getElementById('profileAvatar').innerHTML = `<img src="${imgData}" alt="Profile">`;
+                        localStorage.setItem('movexAvatar', imgData);
+                        addNotification('Profile picture updated');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+        }
+
+        function logout() {
+            if (confirm('Logout?')) {
+                socket?.emit('driver_offline', { driverId: currentUser.id });
+                if (wakeLock) wakeLock.release();
+                localStorage.removeItem('movexDriver');
+                location.reload();
+            }
+        }
+
+        // =============================================
+        // INITIALIZATION
+        // =============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            initAudio();
+            
+            birdAudio = document.getElementById('birdSound');
+            meterAudio = document.getElementById('meterSound');
+            waitingAudio = document.getElementById('waitingSound');
+            notificationAudio = document.getElementById('notificationSound');
+            panicAudio = document.getElementById('panicSound');
+            messageAudio = document.getElementById('messageSound');
+            
+            [birdAudio, meterAudio, waitingAudio, notificationAudio, panicAudio, messageAudio].forEach(audio => {
+                if (audio) audio.load();
+            });
+            
+            if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+                Notification.requestPermission();
+            }
+            
+            const enableAudio = function() {
+                [birdAudio, meterAudio, waitingAudio, notificationAudio, panicAudio, messageAudio].forEach(audio => {
+                    if (audio) {
+                        audio.play().catch(() => {}).then(() => {
+                            audio.pause();
+                            audio.currentTime = 0;
+                        });
+                    }
+                });
+                document.removeEventListener('touchstart', enableAudio);
+                document.removeEventListener('click', enableAudio);
+            };
+            
+            document.addEventListener('touchstart', enableAudio, { once: true });
+            document.addEventListener('click', enableAudio, { once: true });
+            
+            checkSavedSession();
+            
+            const savedAvatar = localStorage.getItem('movexAvatar');
+            if (savedAvatar) {
+                setTimeout(() => {
+                    document.getElementById('driverAvatar').innerHTML = `<img src="${savedAvatar}" alt="Profile">`;
+                    document.getElementById('profileAvatar').innerHTML = `<img src="${savedAvatar}" alt="Profile">`;
+                }, 500);
+            }
+            
+            connectToDispatch();
+            startLocationTracking();
+            updateTime();
+            setInterval(updateTime, 1000);
+            setInterval(checkSpeed, 5000);
+            requestWakeLock();
+            setInterval(checkConnection, 30000);
+        });
+
+        function checkConnection() {
+            if (!socket || !socket.connected) {
+                console.log('Connection lost, attempting to reconnect...');
+                connectToDispatch();
+            }
+        }
+
+        // Make all functions global
+        window.login = login;
+        window.switchPage = switchPage;
+        window.arriveAtPickup = arriveAtPickup;
+        window.boardPassenger = boardPassenger;
+        window.startTrip = startTrip;
+        window.completeTrip = completeTrip;
+        window.requestCancelTrip = requestCancelTrip;
+        window.cancelTrip = cancelTrip;
+        window.startMeter = startMeter;
+        window.pauseMeter = pauseMeter;
+        window.resetMeter = resetMeter;
+        window.toggleWaitingTime = toggleWaitingTime;
+        window.changePassengers = changePassengers;
+        window.updateFare = updateFare;
+        window.setManualFare = setManualFare;
+        window.emergencyCall = emergencyCall;
+        window.shareLocation = shareLocation;
+        window.triggerPanic = triggerPanic;
+        window.showSafetyTips = showSafetyTips;
+        window.openWaze = openWaze;
+        window.openAppleMaps = openAppleMaps;
+        window.openGoogleMaps = openGoogleMaps;
+        window.acceptJob = acceptJob;
+        window.declineJob = declineJob;
+        window.showNotifications = showNotifications;
+        window.showConnectionModal = showConnectionModal;
+        window.closeModal = closeModal;
+        window.reconnect = reconnect;
+        window.refreshConnection = refreshConnection;
+        window.uploadProfilePic = uploadProfilePic;
+        window.sendMessage = sendMessage;
+        window.handleMessageKeyPress = handleMessageKeyPress;
+        window.toggleMessageList = toggleMessageList;
+        window.toggleMessageCenter = toggleMessageCenter;
+        window.logout = logout;
+        window.toggleSpeedAlert = toggleSpeedAlert;
+        window.togglePaymentSection = function() {
+            document.getElementById('paymentSection').classList.toggle('active');
+        };
+        window.showPaymentNotAvailable = function() {
+            document.getElementById('paymentNotAvailableModal').classList.remove('hidden');
+        };
+    </script>
+</body>
+</html>
