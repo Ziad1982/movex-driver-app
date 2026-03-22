@@ -2200,30 +2200,232 @@
         // =============================================
         // ENHANCED AUDIO FOR iOS
         // =============================================
-        function initAudio() {
-            try {
-                window.AudioContext = window.AudioContext || window.webkitAudioContext;
-                if (window.AudioContext) {
-                    audioContext = new AudioContext();
-                    
-                    const resumeAudio = function() {
-                        if (audioContext && audioContext.state === 'suspended') {
-                            audioContext.resume().then(() => {
-                                console.log('AudioContext resumed');
-                            });
-                        }
-                    };
-                    
-                    document.addEventListener('touchstart', resumeAudio);
-                    document.addEventListener('click', resumeAudio);
-                    document.addEventListener('touchend', resumeAudio);
-                    
-                    setInterval(resumeAudio, 10000);
+      
+
+   // Audio URLs that work
+const AUDIO_URLS = {
+    bird: 'https://www.soundjay.com/misc/sounds/bell-ringing-01.mp3',
+    meter: 'https://www.soundjay.com/misc/sounds/beep-01a.mp3',
+    waiting: 'https://www.soundjay.com/misc/sounds/timer-beep.mp3',
+    notification: 'https://www.soundjay.com/misc/sounds/bell-ringing-02.mp3',
+    panic: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3',
+    message: 'https://www.soundjay.com/misc/sounds/notification-2.mp3'
+};
+
+function initAudio() {
+    console.log('🔊 Initializing audio...');
+    
+    birdAudio = new Audio();
+    meterAudio = new Audio();
+    waitingAudio = new Audio();
+    notificationAudio = new Audio();
+    panicAudio = new Audio();
+    messageAudio = new Audio();
+    
+    birdAudio.volume = 1.0;
+    meterAudio.volume = 0.8;
+    waitingAudio.volume = 0.7;
+    notificationAudio.volume = 0.8;
+    panicAudio.volume = 1.0;
+    messageAudio.volume = 0.8;
+    
+    const preloadAudio = (audio, url) => {
+        audio.preload = 'auto';
+        audio.src = url;
+        audio.load();
+    };
+    
+    preloadAudio(birdAudio, AUDIO_URLS.bird);
+    preloadAudio(meterAudio, AUDIO_URLS.meter);
+    preloadAudio(waitingAudio, AUDIO_URLS.waiting);
+    preloadAudio(notificationAudio, AUDIO_URLS.notification);
+    preloadAudio(panicAudio, AUDIO_URLS.panic);
+    preloadAudio(messageAudio, AUDIO_URLS.message);
+    
+    const enableAudio = function() {
+        console.log('🎵 Enabling audio on user interaction');
+        
+        const testAudio = new Audio();
+        testAudio.volume = 0;
+        testAudio.play().then(() => {
+            console.log('✅ Audio context unlocked');
+            testAudio.pause();
+            testAudio.currentTime = 0;
+            
+            birdAudio.play().then(() => {
+                birdAudio.pause();
+                birdAudio.currentTime = 0;
+            }).catch(e => console.log('Bird preload:', e));
+            
+        }).catch(e => console.log('Audio unlock attempt:', e));
+        
+        document.removeEventListener('touchstart', enableAudio);
+        document.removeEventListener('click', enableAudio);
+        document.removeEventListener('touchend', enableAudio);
+    };
+    
+    document.addEventListener('touchstart', enableAudio, { once: true });
+    document.addEventListener('click', enableAudio, { once: true });
+    document.addEventListener('touchend', enableAudio, { once: true });
+    
+    setTimeout(() => {
+        const dummyAudio = new Audio();
+        dummyAudio.volume = 0;
+        dummyAudio.play().catch(() => {});
+    }, 100);
+}
+
+function playBirdSound() {
+    console.log('🐦 Playing bird sound...');
+    
+    showBirdVisualEffect();
+    
+    if (birdAudio) {
+        birdAudio.currentTime = 0;
+        
+        const playPromise = birdAudio.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                console.log('✅ Bird sound played successfully');
+                if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+            }).catch(error => {
+                console.log('❌ Audio play failed:', error);
+                
+                try {
+                    if (audioContext && audioContext.state === 'suspended') {
+                        audioContext.resume().then(() => {
+                            playFallbackBeep();
+                        });
+                    } else {
+                        playFallbackBeep();
+                    }
+                } catch (e) {
+                    console.log('Fallback audio failed:', e);
                 }
-            } catch (e) {
-                console.log('Web Audio API not supported', e);
-            }
+                
+                if (Notification.permission === 'granted') {
+                    new Notification('🚕 New Job Available!', {
+                        body: 'A new trip is waiting for you',
+                        icon: 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'45\' fill=\'%23e67e22\'/%3E%3Ctext x=\'50\' y=\'70\' text-anchor=\'middle\' fill=\'white\' font-size=\'50\'%3E🚕%3C/text%3E%3C/svg%3E'
+                    });
+                }
+            });
         }
+    } else {
+        playFallbackBeep();
+    }
+}
+
+function playBirdSoundDirect() {
+    playBirdSound();
+}
+
+function playFallbackBeep() {
+    try {
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        
+        if (audioContext.state === 'suspended') {
+            audioContext.resume().then(() => {
+                generateBeep();
+            });
+        } else {
+            generateBeep();
+        }
+    } catch (e) {
+        console.log('Web Audio not supported');
+    }
+}
+
+function generateBeep() {
+    try {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 880;
+        gainNode.gain.value = 0.5;
+        
+        oscillator.start();
+        gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.5);
+        oscillator.stop(audioContext.currentTime + 0.5);
+        
+        console.log('✅ Fallback beep played');
+    } catch (e) {
+        console.log('Beep generation failed');
+    }
+}
+
+function showBirdVisualEffect() {
+    const bird = document.createElement('div');
+    bird.innerHTML = '🐦';
+    bird.style.cssText = `
+        position: fixed;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 3rem;
+        z-index: 10001;
+        animation: flyAway 1s ease-out forwards;
+        pointer-events: none;
+    `;
+    
+    if (!document.querySelector('#flyAnimation')) {
+        const style = document.createElement('style');
+        style.id = 'flyAnimation';
+        style.textContent = `
+            @keyframes flyAway {
+                0% {
+                    opacity: 1;
+                    transform: translate(-50%, -50%) rotate(0deg);
+                }
+                100% {
+                    opacity: 0;
+                    transform: translate(100%, -200%) rotate(45deg);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    document.body.appendChild(bird);
+    setTimeout(() => bird.remove(), 1000);
+    
+    const notificationBadge = document.getElementById('notificationBadge');
+    if (notificationBadge) {
+        notificationBadge.style.animation = 'pulse 0.5s 3';
+        setTimeout(() => {
+            notificationBadge.style.animation = '';
+        }, 1500);
+    }
+}
+<div id="dashboardPage" class="page active">
+
+<div id="dashboardPage" class="page active">
+    <!-- Add this test button somewhere visible -->
+    <button onclick="testAudio()" style="position: fixed; bottom: 10px; left: 10px; background: var(--accent); padding: 8px 15px; border-radius: 20px; z-index: 1000; font-size: 12px;">
+        <i class="fas fa-volume-up"></i> Test Sound
+    </button>
+    
+    <!-- Rest of your dashboard content -->
+function playMeterSound() {
+    if (meterAudio) {
+        meterAudio.currentTime = 0;
+        meterAudio.play().catch(() => {});
+    }
+}
+
+function playWaitingSound() {
+    if (waitingAudio) {
+        waitingAudio.currentTime = 0;
+        waitingAudio.play().catch(() => {});
+    }
+}
+
 
         function playBirdSound() {
             console.log('🎵 Playing bird sound...');
@@ -2853,47 +3055,86 @@
                 }
             }, 1000);
         }
-
-        function acceptJob() {
-            clearTimeout(jobTimer);
-            document.getElementById('jobAlert').classList.add('hidden');
+     function acceptJob() {
+    clearTimeout(jobTimer);
+    document.getElementById('jobAlert').classList.add('hidden');
+    
+    if (!currentJobAlert) return;
+    
+    console.log('🎯 Accepting job:', currentJobAlert);
+    
+    socket.emit('job_accepted', {
+        jobId: currentJobAlert.id,
+        driverId: currentUser.id,
+        driverName: currentUser.name,
+        customer: currentJobAlert.customer,
+        phone: currentJobAlert.phone,
+        pickup: currentJobAlert.pickup,
+        destination: currentJobAlert.destination,
+        fare: currentJobAlert.fare,
+        location: { ...lastLocation, address: lastAddress },
+        timestamp: new Date().toISOString()
+    }, (ack) => {
+        if (ack && ack.success) {
+            activeTrip = {
+                id: currentJobAlert.id,
+                customer: currentJobAlert.customer,
+                phone: currentJobAlert.phone,
+                pickup: currentJobAlert.pickup,
+                destination: currentJobAlert.destination,
+                fare: currentJobAlert.fare,
+                autoPrice: currentJobAlert.autoPrice !== false,
+                stage: 'accepted',
+                cancelRequested: false
+            };
             
-            if (!currentJobAlert) return;
+            console.log('✅ Active trip created:', activeTrip);
+            showActiveTripDetails();
             
-            socket.emit('job_accepted', {
-                jobId: currentJobAlert.id,
-                driverId: currentUser.id,
-                driverName: currentUser.name,
-                location: { ...lastLocation, address: lastAddress },
-                timestamp: new Date().toISOString()
-            }, (ack) => {
-                if (ack && ack.success) {
-                    activeTrip = {
-                        id: currentJobAlert.id,
-                        customer: currentJobAlert.customer,
-                        phone: currentJobAlert.phone,
-                        pickup: currentJobAlert.pickup,
-                        destination: currentJobAlert.destination,
-                        fare: currentJobAlert.fare,
-                        autoPrice: currentJobAlert.autoPrice,
-                        stage: 'accepted',
-                        cancelRequested: false
-                    };
-                    
-                    showActiveTrip();
-                    addNotification('Job accepted');
-                    switchPage('map');
-                    
-                    document.getElementById('navPickup').textContent = activeTrip.pickup;
-                    document.getElementById('navDestination').textContent = activeTrip.destination;
-                    document.getElementById('tripCustomerPhone').textContent = activeTrip.phone;
-                } else {
-                    alert('This job is no longer available');
-                }
-            });
+            addNotification(`Job accepted! Trip to ${activeTrip.destination}`);
+            switchPage('dashboard');
             
-            currentJobAlert = null;
+            document.getElementById('navPickup').textContent = activeTrip.pickup;
+            document.getElementById('navDestination').textContent = activeTrip.destination;
+            document.getElementById('tripDestinationInfo').classList.remove('hidden');
+        } else {
+            alert('This job is no longer available');
         }
+    });
+    
+    currentJobAlert = null;
+}
+
+// NEW FUNCTION - Add this RIGHT AFTER acceptJob() function
+function showActiveTripDetails() {
+    if (!activeTrip) return;
+    
+    console.log('📋 Showing trip details:', activeTrip);
+    
+    const tripCard = document.getElementById('activeTripCard');
+    tripCard.classList.remove('hidden');
+    
+    document.getElementById('tripCustomer').textContent = activeTrip.customer || 'Unknown';
+    document.getElementById('tripCustomerPhone').textContent = activeTrip.phone || 'N/A';
+    document.getElementById('tripPickup').textContent = activeTrip.pickup || 'Not specified';
+    document.getElementById('tripDestination').textContent = activeTrip.destination || 'Not specified';
+    document.getElementById('tripFare').textContent = `$${parseFloat(activeTrip.fare).toFixed(2)}`;
+    document.getElementById('tripStage').textContent = 'ACCEPTED';
+    
+    document.getElementById('arriveBtn').disabled = false;
+    document.getElementById('boardBtn').disabled = true;
+    document.getElementById('startBtn').disabled = true;
+    document.getElementById('completeBtn').disabled = true;
+    
+    addActivity(`Trip accepted: ${activeTrip.destination}`, 'success');
+}
+ 
+
+
+
+
+
+
 
         function declineJob() {
             clearTimeout(jobTimer);
@@ -3466,6 +3707,11 @@
         window.sendMessage = sendMessage;
         window.handleMessageKeyPress = handleMessageKeyPress;
         window.refreshConnection = refreshConnection;
+        function testAudio() {
+    console.log('Testing audio...');
+    playBirdSound();
+    alert('Audio test - you should see a bird animation and hear a sound');
+}
     </script>
 </body>
 </html>
