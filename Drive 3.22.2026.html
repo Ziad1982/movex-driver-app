@@ -2197,6 +2197,20 @@
         }
 
         // =============================================
+        // DISTANCE CALCULATION - Haversine formula (NEW)
+        // =============================================
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 3959; // Earth's radius in miles
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        // =============================================
         // ENHANCED AUDIO - SINGLE VERSION
         // =============================================
         const AUDIO_URLS = {
@@ -2268,19 +2282,35 @@
             }, 100);
         }
 
+        // ENHANCED BIRD SOUND WITH FALLBACKS
         function playBirdSound() {
-            console.log('🐦 Playing bird sound...');
+            console.log('🐦 Playing bird sound notification');
+            
+            // Visual effect always works
             showBirdVisualEffect();
+            
+            // Vibrate for haptic feedback on phones
+            if (navigator.vibrate) navigator.vibrate([300, 150, 300]);
+            
+            // Try primary audio
             if (birdAudio) {
                 birdAudio.currentTime = 0;
                 birdAudio.play().catch(error => {
-                    console.log('❌ Audio play failed:', error);
+                    console.log('Primary audio failed, trying fallback');
+                    // Try fallback beep
                     playFallbackBeep();
                 });
             } else {
                 playFallbackBeep();
             }
-            if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+            
+            // Browser notification (always works)
+            if (Notification.permission === 'granted') {
+                new Notification('🚕 New Job Available!', {
+                    body: 'A new trip is waiting for you',
+                    icon: 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'45\' fill=\'%23e67e22\'/%3E%3Ctext x=\'50\' y=\'70\' text-anchor=\'middle\' fill=\'white\' font-size=\'50\'%3E🚕%3C/text%3E%3C/svg%3E'
+                });
+            }
         }
 
         function playFallbackBeep() {
@@ -2826,22 +2856,35 @@
         }
 
         // =============================================
-        // JOB HANDLING
+        // JOB HANDLING (UPDATED with distance calculation)
         // =============================================
         function handleIncomingJob(jobData) {
             if (activeTrip) return;
+            
+            // Calculate actual distance from driver to pickup
+            let distanceToPickup = jobData.distance || '2.5';
+            if (jobData.pickupLat && lastLocation) {
+                distanceToPickup = calculateDistance(
+                    lastLocation.lat, lastLocation.lng, 
+                    jobData.pickupLat, jobData.pickupLng
+                ).toFixed(1);
+            }
+            
             currentJobAlert = {
                 id: jobData.id,
                 customer: jobData.customer,
                 phone: jobData.phone || 'N/A',
                 pickup: jobData.pickup,
                 destination: jobData.destination,
-                distance: jobData.distance || '2.5',
+                distance: distanceToPickup,
                 fare: jobData.fare || 25.00,
-                autoPrice: jobData.autoPrice !== undefined ? jobData.autoPrice : autoPriceCalculation
+                autoPrice: jobData.autoPrice !== undefined ? jobData.autoPrice : autoPriceCalculation,
+                pickupLat: jobData.pickupLat,
+                pickupLng: jobData.pickupLng
             };
-            showJobAlert(currentJobAlert.distance);
-            addNotification(`New job: ${currentJobAlert.distance} miles away`);
+            
+            showJobAlert(distanceToPickup);
+            addNotification(`New job: ${distanceToPickup} miles to pickup`);
         }
 
         function showJobAlert(distance) {
@@ -2876,6 +2919,8 @@
                 pickup: currentJobAlert.pickup,
                 destination: currentJobAlert.destination,
                 fare: currentJobAlert.fare,
+                distance: currentJobAlert.distance,
+                selectionMethod: currentJobAlert.selectionMethod || 'Nearest Driver',
                 location: { ...lastLocation, address: lastAddress },
                 timestamp: new Date().toISOString()
             }, (ack) => {
@@ -2889,11 +2934,12 @@
                         fare: currentJobAlert.fare,
                         autoPrice: currentJobAlert.autoPrice !== false,
                         stage: 'accepted',
-                        cancelRequested: false
+                        cancelRequested: false,
+                        storedFare: currentJobAlert.fare
                     };
                     console.log('✅ Active trip created:', activeTrip);
                     showActiveTripDetails();
-                    addNotification(`Job accepted! Trip to ${activeTrip.destination}`);
+                    addNotification(`Job accepted! ${activeTrip.distance} miles to pickup`);
                     switchPage('dashboard');
                     document.getElementById('navPickup').textContent = activeTrip.pickup;
                     document.getElementById('navDestination').textContent = activeTrip.destination;
@@ -2905,6 +2951,7 @@
             currentJobAlert = null;
         }
 
+        // UPDATED: Hides price until meter starts
         function showActiveTripDetails() {
             if (!activeTrip) return;
             console.log('📋 Showing trip details:', activeTrip);
@@ -2914,13 +2961,19 @@
             document.getElementById('tripCustomerPhone').textContent = activeTrip.phone || 'N/A';
             document.getElementById('tripPickup').textContent = activeTrip.pickup || 'Not specified';
             document.getElementById('tripDestination').textContent = activeTrip.destination || 'Not specified';
-            document.getElementById('tripFare').textContent = `$${parseFloat(activeTrip.fare).toFixed(2)}`;
+            
+            // HIDE PRICE until meter is started
+            const fareElement = document.getElementById('tripFare');
+            fareElement.innerHTML = '<span style="opacity:0.6;">💰 Hidden</span>';
+            fareElement.style.opacity = '0.6';
+            
             document.getElementById('tripStage').textContent = 'ACCEPTED';
             document.getElementById('arriveBtn').disabled = false;
             document.getElementById('boardBtn').disabled = true;
             document.getElementById('startBtn').disabled = true;
             document.getElementById('completeBtn').disabled = true;
-            addActivity(`Trip accepted: ${activeTrip.destination}`, 'success');
+            
+            addActivity(`Trip accepted: ${activeTrip.destination} (${activeTrip.distance} miles away)`, 'success');
         }
 
         function declineJob() {
@@ -2970,17 +3023,27 @@
             addNotification('Passenger boarded');
         }
 
+        // UPDATED: Shows price when meter starts
         function startTrip() {
             if (!activeTrip) return;
             activeTrip.stage = 'started';
             document.getElementById('tripStage').textContent = 'TRIP STARTED';
             document.getElementById('startBtn').disabled = true;
             document.getElementById('completeBtn').disabled = false;
+            
+            // SHOW PRICE NOW that meter is starting
+            if (activeTrip.storedFare) {
+                document.getElementById('tripFare').innerHTML = `$${parseFloat(activeTrip.storedFare).toFixed(2)}`;
+                document.getElementById('tripFare').style.opacity = '1';
+                document.getElementById('currentFare').textContent = `$${parseFloat(activeTrip.storedFare).toFixed(2)}`;
+                activeTrip.fare = activeTrip.storedFare;
+            }
+            
             startMeter();
             if (socket && socket.connected) {
                 socket.emit('trip_update', { tripId: activeTrip.id, stage: 'started', location: { ...lastLocation, address: lastAddress } });
             }
-            addNotification('Trip started');
+            addNotification('Trip started - meter running');
         }
 
         function completeTrip() {
@@ -3165,12 +3228,19 @@
             if (activeTrip) { document.getElementById('tripFare').textContent = `$${total.toFixed(2)}`; }
         }
 
+        // UPDATED: Shows price when dispatcher sets manual fare
         function setManualFare() {
             const amount = parseFloat(document.getElementById('manualFareAmount').value);
             if (!isNaN(amount) && amount >= 0) {
                 manualFareOverride = amount;
                 updateFare();
-                addNotification(`Manual fare set to $${amount.toFixed(2)}`);
+                
+                // SHOW PRICE immediately when dispatcher sets it
+                document.getElementById('tripFare').innerHTML = `$${amount.toFixed(2)}`;
+                document.getElementById('tripFare').style.opacity = '1';
+                document.getElementById('currentFare').textContent = `$${amount.toFixed(2)}`;
+                
+                addNotification(`Dispatcher preset fare: $${amount.toFixed(2)}`);
                 document.getElementById('manualFareAmount').value = '';
             }
         }
